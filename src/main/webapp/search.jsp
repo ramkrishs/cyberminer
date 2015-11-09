@@ -71,14 +71,18 @@
                         </span>
                     </div>
                         </form>
-                    <div class="search-count">search result: </div>
+                    <% 
+                            SearchResponse searchResponse = (SearchResponse)request.getAttribute("searchResult");
+                            
+                            %>
+                    <div class="search-count">search result: <% if (searchResponse != null) { 
+                        out.println(searchResponse.getHits().totalHits()); %>
+                    </div>
                     <hr>
                     <h3 class="search-count">Search Result</h3>
                     <div class="search-result">
-                        <% 
-                            SearchResponse searchResponse = (SearchResponse)request.getAttribute("searchResult");
+                        <%
                             
-                            if (searchResponse != null) {
                                 SearchHit[] results = searchResponse.getHits().getHits();
                                 
                                 for(SearchHit hit : results){
