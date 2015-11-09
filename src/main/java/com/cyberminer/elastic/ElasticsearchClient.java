@@ -1,12 +1,16 @@
 package com.cyberminer.elastic;
 
-import com.cyberminer.DBClient.DBClient;
+import javax.json.JsonObject;
+
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
-public class ElasticsearchClient implements DBClient {
+public class ElasticsearchClient {
 	
 	private ElasticsearchConnection esCon;
 	
@@ -15,7 +19,6 @@ public class ElasticsearchClient implements DBClient {
 	}
 	
 	
-    @Override
 	public IndexResponse insert(String index, XContentBuilder document) {
 		IndexResponse response = esCon.client.prepareIndex(index,"urlmapping")
 		        .setSource(document)
@@ -24,7 +27,6 @@ public class ElasticsearchClient implements DBClient {
                 return response;
 	}
         
-    @Override
         public SearchResponse search(String index, String document) {
 		SearchResponse response = esCon.client.prepareSearch(index)
                                         .setTypes("urlmapping")
@@ -35,7 +37,6 @@ public class ElasticsearchClient implements DBClient {
 	}
 
 	
-    @Override
 	public void closeConnection() {
 		this.esCon.closeClient();
 	}
