@@ -4,6 +4,7 @@
     Author     : Ram
 --%>
 
+<%@page import="org.elasticsearch.action.index.IndexResponse"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!Doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -59,17 +60,34 @@
                     <h1 class="text-center">ADD URL</h1>
                     <hr>
                     <div class='add-url-box'>
-                        <form action="#">
+                        <form action="result" method="post">
                             <div>
-                                <input type="text" id="url-input" placeholder="Enter the URL ex: http://utdallas.edu" data-label="URL" class="floatlabel">
+                                <input type="text" id="url-input" name="urlString" placeholder="Enter the URL ex: http://utdallas.edu" data-label="URL" class="floatlabel">
                             </div>
                             <div>
-                                <input type="text" id="desc-input" placeholder="Enter the URL's description" data-label="Description" class="floatlabel">
+                                <input type="text" id="desc-input" name="userDescription" placeholder="Enter the URL's description" data-label="Description" class="floatlabel">
                             </div>
-                            <input type="submit" value="Add URL" class="butn">
-
+                            <input type="submit" value="Add URL" name="insert" class="butn">
+                            
                         </form>
+                        <% 
+                        IndexResponse insertResponse = (IndexResponse) request.getAttribute("insertResult");
+                        if (insertResponse != null) {
+                            if(insertResponse.isCreated()){
+                                %>
+                                <div class="alert alert-success text-center">
+                                    <% out.println("Value Inserted!!");
+                            }
+                            else{
+                                    out.println("Value Not Inserted!!");
+                            }
+                            
+                        }
+                    
+                            %>
+                       </div>
                     </div>
+                    
                 </div>
             </div>
 

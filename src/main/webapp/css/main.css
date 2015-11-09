@@ -173,3 +173,7 @@ input:focus{
 .move{
     padding-left: 15%;
 }
+.alert{
+    width: 200px;
+    margin-top: 10px;
+}   

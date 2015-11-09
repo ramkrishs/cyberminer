@@ -4,6 +4,9 @@
     Author     : Ram
 --%>
 
+<%@page import="java.util.Map"%>
+<%@page import="org.elasticsearch.search.SearchHit"%>
+<%@page import="org.elasticsearch.action.search.SearchResponse"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -58,29 +61,41 @@
                 <div class="col-md-9 mainbar">
                     <a href='index.jsp'>&laquo; Back to Home</a><br>
                     <h1 class="text-center">Search</h1>
+                    <form action="result" method="post">
                     <div class="input-group col-md-12 col-sm-12 col-xs-12 search-bar  ">
-                        <input type="text" class="form-control input-lg" placeholder="Enter a String to Search in KWIC Index" id="user_input_val"/>
+                        <input type="text" class="form-control input-lg" placeholder="Enter a String to Search in KWIC Index" name="searchString" id="SearchString"/>
                         <span class="input-group-btn">
-                            <button class="btn btn-info btn-lg" type="button" data-toggle="tooltip" data-placement="top" title="Click here to Search" id="gen_btn">
+                            <button class="btn btn-info btn-lg" type="submit" data-toggle="tooltip" name="search" data-placement="top" title="Click here to Search" id="gen_btn">
                                 <i class="glyphicon glyphicon-search"></i> Search
                             </button>
                         </span>
                     </div>
-                    <div class="search-count">search result: 30</div>
+                        </form>
+                    <div class="search-count">search result: </div>
                     <hr>
                     <h3 class="search-count">Search Result</h3>
                     <div class="search-result">
-                        <li><a href="http://google.com" target="_blank">Google.com</a>
-                            <p>This is a sample description</p>
-                        </li>
-                        <li><a href="http://google.com" target="_blank">Google.com</a>
-                            <p>This is a sample description</p>
-                        </li>
-                        <li><a href="http://google.com" target="_blank">Google.com</a>
-                            <p>This is a sample description</p>
-                        </li>
+                        <% 
+                            SearchResponse searchResponse = (SearchResponse)request.getAttribute("searchResult");
+                            
+                            if (searchResponse != null) {
+                                SearchHit[] results = searchResponse.getHits().getHits();
+                                
+                                for(SearchHit hit : results){
 
+                                  String sourceAsString = hit.getSourceAsString();
 
+                                     Map<String, Object> data = hit.getSource();
+
+                                   if (sourceAsString != null) {
+                                      %>
+                                      <li><a href="<% out.println(data.get("url")); %>" target="_blank"><% out.println(data.get("url")); %></a>
+                                        <p><% out.println(data.get("description")); %></p>
+                                      </li>
+                                      <%  
+                                   }
+                                 }
+                            }%>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-package com.cyberminer.elasticsearch;
+package com.cyberminer.elastic;
 
 import javax.json.JsonObject;
 
@@ -24,8 +24,6 @@ public class ElasticsearchClient {
 		        .setSource(document)
 		        .execute()
 		        .actionGet();
-//		System.out.println("## Response "+response);
-                
                 return response;
 	}
         
