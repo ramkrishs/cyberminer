@@ -6,56 +6,43 @@
 
 <%@page import="org.elasticsearch.action.index.IndexResponse"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!Doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+<!DOCTYPE html>
+<html lang="en">
     <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Cyberminer - Add URL</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Bootply" />
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                overflow: hidden;
-                padding-top: 50px;
-
-            }
-        </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
-        <link href='http://fonts.googleapis.com/css?family=Sanchez|Bangers' rel='stylesheet' type='text/css'>
-        <!--[if lt IE 9]>
-        <script src="js/vendor/html5-3.6-respond-1.4.2.min.js"></script>
-        <![endif]-->
     </head>
     <body>
-        <!--[if lt IE 8]>
-                                    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+        <!-- header -->
+        <!-- /Header -->
+        <!-- Main -->
+        <div class="wrapper">
         <div class="container">
-            <!-- Example row of columns -->
             <div class="row">
-                <div class="col-md-3 sidebar">
+                <div class="col-sm-3 sidebar">
                     <div class="masthead clearfix">
                         <h1 class="text-center"><img src="img/logo.png" class="img-responsive"/></h1>
                         <h4 class="text-center">A KWIC Based Search Engine</h4>
                         <div class="text-right">
                             <h3>description</h3>
                             <p>User can filter out <br>symbols/words which are not meaningful.</p>
+                            <h4><strong>Prof: Dr. Lawrence Chung</strong></h3>
+                            <h4>Team members</h4>
+                            <li>Karthik Kannambadi Sridhar</li>
+                            <li>Ramakrishnan Sathyavageeswaran</li>
+                            <li>Vaidehi Jariwala</li>
                         </div>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
                     </div>
                 </div>
-                <div class="col-md-9 mainbar">
+
+                <!-- /col-3 -->
+                <div class="col-sm-9 mainbar">
                     <a href='index.jsp'>&laquo; Back to Home</a><br>
                     <h1 class="text-center">ADD URL</h1>
                     <hr>
@@ -87,20 +74,23 @@
                             %>
                        </div>
                     </div>
-                    
                 </div>
+                <!--/col-span-9-->
             </div>
-
         </div>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
-        <script src="js/vendor/bootstrap.min.js"></script>
-        <script src="js/floatlabels.min.js" type="text/javascript"></script>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('input.floatlabel').floatlabel();
-            });
-        </script>
-        <script src="js/main.js"></script>
-    </body>
+        <!-- /Main -->
+    <footer class="text-center">Cyberminer ASA Project UTDallas Fall 2015</a></footer>
+    </div>
+    <!-- script references -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+    <script src="js/vendor/bootstrap.min.js"></script>
+    <script src="js/floatlabels.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+                                $(document).ready(function() {
+                                $('input.floatlabel').floatlabel();
+                                });
+    </script>
+    <script src="js/main.js"></script>
+</body>
 </html>
