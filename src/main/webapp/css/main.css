@@ -1,8 +1,8 @@
 html,
 body {
-   margin:0;
-   padding:0;
-   height:100%;
+    margin:0;
+    padding:0;
+    height:100%;
 }
 .wrapper {
     min-height:100%;
@@ -12,16 +12,16 @@ body {
     padding-bottom:80px;
 }
 .container {
-  width: 970px;
-  max-width: none !important;
+    width: 970px;
+    max-width: none !important;
 }
 footer{
     width:100%;
-    
+
     position:absolute;
     bottom:0;
     left:0;
-    
+
     padding-top: 20px;
     padding-bottom: 20px;
     background-color: #efefef;
@@ -73,12 +73,12 @@ h4 {
 }
 
 .mainbar {
-  padding-top: 30px;
+    padding-top: 30px;
 }
 
 .main-nav {
-  padding-top: 10%;
-  padding-left: 30%;
+    padding-top: 10%;
+    padding-left: 30%;
 
 }
 

@@ -10,8 +10,8 @@ package com.cyberminer.commons;
  * @author Ram
  */
 public class Constants {
-	
-        public static final String ES_CLUSTER_NAME = "cyberminer_cluster-dev"; 
-	public static final String ES_HOST = "localhost"; 
-	public static final String USER_TABLE_NAME = "kwic"; 
+
+    public static final String ES_CLUSTER_NAME = "cyberminer_cluster-dev";
+    public static final String ES_HOST = "localhost";
+    public static final String USER_TABLE_NAME = "kwic";
 }

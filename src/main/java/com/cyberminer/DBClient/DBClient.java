@@ -20,5 +20,5 @@ public interface DBClient {
     IndexResponse insert(String index, XContentBuilder document);
 
     SearchResponse search(String index, String document);
-    
+
 }
