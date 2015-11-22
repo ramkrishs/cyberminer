@@ -65,7 +65,7 @@ public class ElasticSearch extends HttpServlet {
                 SearchResponse searchResponse = new SearchResponse();
                 if(searchString.contains("!")){
                     String[] newString = searchString.split(Pattern.quote("!"));
-                    searchResponse = escon.notSearch("kwic", searchString);
+                    searchResponse = escon.notSearch("kwic", newString[1]);
                 }
                 else{
                     
