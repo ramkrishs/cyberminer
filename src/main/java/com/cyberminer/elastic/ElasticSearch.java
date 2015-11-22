@@ -6,6 +6,7 @@
 package com.cyberminer.elastic;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,7 +63,16 @@ public class ElasticSearch extends HttpServlet {
         if (request.getParameter("search") != null) {
             if (!searchString.isEmpty()) {
                 SearchResponse searchResponse = new SearchResponse();
-                searchResponse = escon.notSearch("kwic", searchString);
+                if(searchString.contains("!")){
+                    String[] newString = searchString.split(Pattern.quote("!"));
+                    searchResponse = escon.notSearch("kwic", searchString);
+                }
+                else{
+                    
+                    searchResponse = escon.search("kwic", searchString);
+                    
+                }
+                
                 if (searchResponse != null) {
                     request.setAttribute("searchResult", searchResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
