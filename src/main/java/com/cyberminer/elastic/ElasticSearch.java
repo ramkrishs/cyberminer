@@ -62,7 +62,7 @@ public class ElasticSearch extends HttpServlet {
         if (request.getParameter("search") != null) {
             if (!searchString.isEmpty()) {
                 SearchResponse searchResponse = new SearchResponse();
-                searchResponse = escon.search("kwic", searchString);
+                searchResponse = escon.notSearch("kwic", searchString);
                 if (searchResponse != null) {
                     request.setAttribute("searchResult", searchResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("search.jsp");

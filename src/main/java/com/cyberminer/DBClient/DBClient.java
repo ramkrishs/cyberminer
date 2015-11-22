@@ -11,7 +11,7 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 
 /**
  *
- * @author John
+ * @author Ram
  */
 public interface DBClient {
 
@@ -20,5 +20,7 @@ public interface DBClient {
     IndexResponse insert(String index, XContentBuilder document);
 
     SearchResponse search(String index, String document);
+    
+    SearchResponse notSearch(String index, String document);
 
 }
