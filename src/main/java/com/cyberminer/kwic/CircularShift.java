@@ -20,7 +20,7 @@ public class CircularShift {
         ArrayDeque<String> cslines = new ArrayDeque<>(Arrays.asList(lines.split(" ")));
         newObj.setLines(lines);
         for (int i = 0; i < cslines.size() - 1; i++) {
-            
+
             String firstWord = cslines.pop();
             cslines.add(firstWord);
             StringJoiner joiner = new StringJoiner(" ");

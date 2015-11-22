@@ -29,7 +29,7 @@ public class ElasticsearchClient implements DBClient {
     }
 
     @Override
-    public SearchResponse search(String index, String document) {
+    public SearchResponse orSearch(String index, String document) {
         SearchResponse response = esCon.client.prepareSearch(index)
                 .setTypes("urlmapping")
                 .setQuery(QueryBuilders.matchQuery("description", document))
@@ -37,21 +37,30 @@ public class ElasticsearchClient implements DBClient {
                 .actionGet();
         return response;
     }
-    
+
     @Override
-    public SearchResponse notSearch(String index,String document){
-        //BoolQueryBuilder qb = QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery("description", document));
+    public SearchResponse notSearch(String index, String document) {
         QueryBuilder qb = QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery("description", document));
-//FilterBuilder qb = boolFilter().mustNot(termFilter("description", document));
         SearchResponse response = esCon.client.prepareSearch(index)
-                        .setTypes("urlmapping")
-                        .setQuery(qb)
-                        .execute()
-                        .actionGet();
-        
-        
-                                
-        
+                .setTypes("urlmapping")
+                .setQuery(qb)
+                .execute()
+                .actionGet();
+        return response;
+    }
+
+    @Override
+    public SearchResponse andSearch(String index, String[] document) {
+        BoolQueryBuilder qb = QueryBuilders.boolQuery()
+                .must(QueryBuilders.matchQuery("description", document[0]));
+        for (int i = 1; i < document.length; i++) {
+            qb.must(QueryBuilders.matchQuery("description", document[i]));
+        }
+        SearchResponse response = esCon.client.prepareSearch(index)
+                .setTypes("urlmapping")
+                .setQuery(qb)
+                .execute()
+                .actionGet();
         return response;
     }
 

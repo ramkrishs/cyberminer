@@ -19,8 +19,10 @@ public interface DBClient {
 
     IndexResponse insert(String index, XContentBuilder document);
 
-    SearchResponse search(String index, String document);
-    
+    SearchResponse orSearch(String index, String document);
+
     SearchResponse notSearch(String index, String document);
+
+    SearchResponse andSearch(String index, String[] document);
 
 }

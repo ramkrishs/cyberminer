@@ -63,16 +63,21 @@ public class ElasticSearch extends HttpServlet {
         if (request.getParameter("search") != null) {
             if (!searchString.isEmpty()) {
                 SearchResponse searchResponse = new SearchResponse();
-                if(searchString.contains("!")){
+                if (searchString.contains("!")) {
                     String[] newString = searchString.split(Pattern.quote("!"));
                     searchResponse = escon.notSearch("kwic", newString[1]);
+                } else if (searchString.contains("&&")) {
+                    String[] newString = searchString.split(Pattern.quote("&&"));
+                    for (int i = 0; i < newString.length; i++) {
+                        newString[i] = newString[i].trim();
+                    }
+                    searchResponse = escon.andSearch("kwic", newString);
+                } else {
+
+                    searchResponse = escon.orSearch("kwic", searchString);
+
                 }
-                else{
-                    
-                    searchResponse = escon.search("kwic", searchString);
-                    
-                }
-                
+
                 if (searchResponse != null) {
                     request.setAttribute("searchResult", searchResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("search.jsp");

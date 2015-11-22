@@ -35,11 +35,11 @@ public class MasterController extends HttpServlet {
         String stringName = request.getParameter("userInputString");
         if (!stringName.isEmpty()) {
             csObject.doCircularShift(stringName);
-            
+
             ArrayList<String> csArrayOutput = csObject.getCsOutput();
             ArrayList<String> noiseElimatedOutput = noiseElimatorObject.elimateNoiseLine(csArrayOutput);
             alphabetizerObject.doAlphabetize(noiseElimatedOutput);
-            
+
             if (!csArrayOutput.isEmpty() && alphabetizerObject != null) {
 
                 request.setAttribute("cslist", csArrayOutput);

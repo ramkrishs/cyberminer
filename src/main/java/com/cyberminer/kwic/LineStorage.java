@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class LineStorage {
 
     private ArrayList<String> lines = new ArrayList<String>();
-    
+
     public ArrayList<String> getLines() {
         return lines;
     }
