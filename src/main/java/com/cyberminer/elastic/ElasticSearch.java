@@ -5,7 +5,13 @@
  */
 package com.cyberminer.elastic;
 
+import com.cyberminer.kwic.Alphabetizer;
+import com.cyberminer.kwic.CircularShift;
+import com.cyberminer.kwic.NoiseEliminator;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +22,7 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import org.elasticsearch.search.SearchHit;
 
 /**
  *
@@ -26,7 +33,9 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 public class ElasticSearch extends HttpServlet {
 
     ElasticsearchClient escon = new ElasticsearchClient();
-
+    CircularShift csObject = new CircularShift();
+    Alphabetizer alphabetizerObject = new Alphabetizer();
+    NoiseEliminator noiseElimatorObject = new NoiseEliminator();
     /**
      *
      * @param request
@@ -42,11 +51,16 @@ public class ElasticSearch extends HttpServlet {
         String urlvalue = request.getParameter("urlString");
         if (request.getParameter("insert") != null) {
             if (!stringName.isEmpty() && !urlvalue.isEmpty()) {
+                csObject.doCircularShift(stringName);
+                ArrayList<String> csArrayOutput = csObject.getCsOutput();
+                ArrayList<String> noiseElimatedOutput = noiseElimatorObject.elimateNoiseLine(csArrayOutput);
+                alphabetizerObject.doAlphabetize(noiseElimatedOutput);
+                ArrayList<String> alphalist = alphabetizerObject.getAlphabetizedOutput();
+                alphalist.add(stringName);
                 XContentBuilder builder = jsonBuilder()
                         .startObject()
                         .field("url", urlvalue)
-                        .field("description", stringName)
-                        .field("hitrate", "3")
+                        .field("description", alphalist)
                         .endObject();
                 IndexResponse insertResponse = new IndexResponse();
                 insertResponse = escon.insert("kwic", builder);
@@ -79,7 +93,16 @@ public class ElasticSearch extends HttpServlet {
                 }
 
                 if (searchResponse != null) {
-                    request.setAttribute("searchResult", searchResponse);
+                    List<Map<String, Object>> searchResponses = new  ArrayList();
+                    SearchHit[] results = searchResponse.getHits().getHits();
+                    int totalHits = (int) searchResponse.getHits().totalHits();
+                    for (SearchHit hit : results) {
+
+                        Map<String, Object> data = hit.getSource();
+                        searchResponses.add(data);
+                    }
+                    request.setAttribute("searchResult", totalHits);
+                    request.setAttribute("searchResponse", searchResponses);
                     RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
                     rd.forward(request, response);
 

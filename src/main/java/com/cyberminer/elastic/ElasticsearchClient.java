@@ -45,6 +45,8 @@ public class ElasticsearchClient implements DBClient {
                 .setQuery(qb)
                 .execute()
                 .actionGet();
+        
+        
         return response;
     }
 

@@ -4,6 +4,8 @@
     Author     : Ram
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
 <%@page import="org.elasticsearch.search.SearchHit"%>
 <%@page import="org.elasticsearch.action.search.SearchResponse"%>
@@ -56,34 +58,40 @@
                             </div>
                         </form>
                         <%
-                            SearchResponse searchResponse = (SearchResponse) request.getAttribute("searchResult");
-
+                            try{
+                            
+                            int totalHits = (int) request.getAttribute("searchResult");
+                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("searchResponse");;
                         %>
-                        <div class="search-count">search result: <% if (searchResponse != null) {
-                            out.println(searchResponse.getHits().totalHits()); %>
+                        <div class="search-count">search result: 
+                            <% if ((request.getAttribute("searchResult")!= null ) && request.getAttribute("searchResponse")!= null) {
+                                out.println(totalHits); 
+                            %>
                         </div>
                         <hr>
                         <h3 class="search-count">Search Result</h3>
                         <div class="search-result">
                             <%
 
-                                SearchHit[] results = searchResponse.getHits().getHits();
+                                for (Map data : searchResponses) {
 
-                                for (SearchHit hit : results) {
-
-                                    String sourceAsString = hit.getSourceAsString();
-
-                                    Map<String, Object> data = hit.getSource();
-
-                                    if (sourceAsString != null) {
+                                    if (data != null) {
                             %>
                             <li><a href="<% out.println(data.get("url")); %>" target="_blank"><% out.println(data.get("url")); %></a>
-                                <p><% out.println(data.get("description")); %></p>
+                                <p><%
+                                    ArrayList descrip = (ArrayList) data.get("description");
+                                    System.out.println(descrip.get(0));
+                                    out.println(descrip.get(descrip.size() - 1)); %></p>
                             </li>
                             <%
-                                                  }
-                                              }
-                                          }%>
+                                        }
+                                    }
+                            }
+                            }
+                            catch(Exception e){
+                                
+                            }
+                            %>
                         </div>
                     </div>
                     <!--/col-span-9-->
