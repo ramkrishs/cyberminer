@@ -32,10 +32,8 @@ import org.elasticsearch.search.SearchHit;
  */
 public class ElasticSearch extends HttpServlet {
 
-    ElasticsearchClient escon = new ElasticsearchClient();
-    CircularShift csObject = new CircularShift();
-    Alphabetizer alphabetizerObject = new Alphabetizer();
-    NoiseEliminator noiseElimatorObject = new NoiseEliminator();
+    
+   ElasticsearchClient escon = new ElasticsearchClient();
     /**
      *
      * @param request
@@ -50,7 +48,12 @@ public class ElasticSearch extends HttpServlet {
         String stringName = request.getParameter("userDescription");
         String urlvalue = request.getParameter("urlString");
         if (request.getParameter("insert") != null) {
+            
             if (!stringName.isEmpty() && !urlvalue.isEmpty()) {
+                
+                CircularShift csObject = new CircularShift();
+                Alphabetizer alphabetizerObject = new Alphabetizer();
+                NoiseEliminator noiseElimatorObject = new NoiseEliminator();
                 csObject.doCircularShift(stringName);
                 ArrayList<String> csArrayOutput = csObject.getCsOutput();
                 ArrayList<String> noiseElimatedOutput = noiseElimatorObject.elimateNoiseLine(csArrayOutput);
@@ -110,6 +113,7 @@ public class ElasticSearch extends HttpServlet {
 
                 }
             }
+           
         }
 
     }

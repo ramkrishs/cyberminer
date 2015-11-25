@@ -9,7 +9,7 @@ $(document).ready(function () {
     });
 
     $("#drpdown").change(function () {
-        alert("hi");
+        
         $("resu").html($("#drpdown").val());
     });   
 });
