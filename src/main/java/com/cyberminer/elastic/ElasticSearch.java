@@ -57,10 +57,12 @@ public class ElasticSearch extends HttpServlet {
                 alphabetizerObject.doAlphabetize(noiseElimatedOutput);
                 ArrayList<String> alphalist = alphabetizerObject.getAlphabetizedOutput();
                 alphalist.add(stringName);
-                XContentBuilder builder = jsonBuilder()
+                XContentBuilder builder;
+                builder = jsonBuilder()
                         .startObject()
                         .field("url", urlvalue)
                         .field("description", alphalist)
+                        .field("hitrate",0)
                         .endObject();
                 IndexResponse insertResponse = new IndexResponse();
                 insertResponse = escon.insert("kwic", builder);
