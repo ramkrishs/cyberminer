@@ -5,6 +5,7 @@
  */
 package com.cyberminer.elastic;
 
+import static com.cyberminer.commons.Constants.URL_TABLE_NAME;
 import com.cyberminer.kwic.Alphabetizer;
 import com.cyberminer.kwic.CircularShift;
 import com.cyberminer.kwic.NoiseEliminator;
@@ -68,7 +69,7 @@ public class ElasticSearch extends HttpServlet {
                         .field("hitrate",0)
                         .endObject();
                 IndexResponse insertResponse = new IndexResponse();
-                insertResponse = escon.insert("kwic", builder);
+                insertResponse = escon.insert(URL_TABLE_NAME, builder);
                 if (insertResponse != null) {
                     request.setAttribute("insertResult", insertResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("addurl.jsp");
@@ -84,16 +85,16 @@ public class ElasticSearch extends HttpServlet {
                 SearchResponse searchResponse = new SearchResponse();
                 if (searchString.contains("!")) {
                     String[] newString = searchString.split(Pattern.quote("!"));
-                    searchResponse = escon.notSearch("kwic", newString[1]);
+                    searchResponse = escon.notSearch(URL_TABLE_NAME, newString[1]);
                 } else if (searchString.contains("&&")) {
                     String[] newString = searchString.split(Pattern.quote("&&"));
                     for (int i = 0; i < newString.length; i++) {
                         newString[i] = newString[i].trim();
                     }
-                    searchResponse = escon.andSearch("kwic", newString);
+                    searchResponse = escon.andSearch(URL_TABLE_NAME, newString);
                 } else {
 
-                    searchResponse = escon.orSearch("kwic", searchString);
+                    searchResponse = escon.orSearch(URL_TABLE_NAME, searchString);
 
                 }
 
@@ -128,7 +129,13 @@ public class ElasticSearch extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        doPost(req, resp);
+        SearchResponse searchResponse = new SearchResponse();
+        searchResponse = escon.notSearch(URL_TABLE_NAME, "best");
+        if (searchResponse != null) {
+        String data = "Hello World!";
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("UTF-8");
+        resp.getWriter().write(data);
     }
-
+}
 }

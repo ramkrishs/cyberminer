@@ -12,7 +12,7 @@ public class ElasticsearchConnection {
     public Client client;
     public static final String ES_CLUSTER_NAME = Constants.ES_CLUSTER_NAME;
     public static final String ES_HOST = Constants.ES_HOST;
-    public static final String ES_INDEX = Constants.USER_TABLE_NAME;
+    public static final String ES_INDEX = Constants.URL_TABLE_NAME;
     public static final String ES_TYPE =Constants.ES_TYPE;
     public static Settings settings = ImmutableSettings.settingsBuilder()
             .put("cluster.name", ES_CLUSTER_NAME).build();

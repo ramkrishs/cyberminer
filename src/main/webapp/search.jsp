@@ -21,12 +21,6 @@
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
     </head>
-    <script>
-       
-        
-        
-        
-    </script>
     <body>
         <!-- header -->
         <!-- /Header -->
@@ -64,15 +58,14 @@
                             </div>
                         </form>
                         <%
-                            
-                            
-                            
                             List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("searchResponse");;
                         %>
                         
                          <% if (request.getAttribute("searchResponse")!= null) {%>
+                         
                          <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="glyphicon glyphicon-sort-by-alphabet " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                          <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="glyphicon glyphicon-sort-by-order " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
+                         <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
                         <div class="search-count">search result: 
                            <%
                                 int totalHits = (int) request.getAttribute("searchResult");
