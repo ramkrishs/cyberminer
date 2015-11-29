@@ -15,9 +15,10 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
-        <title>Cyberminer - Home</title>
+        <title>Cyberminer - Search</title>
         <link href="css/smartpaginator.css" rel="stylesheet" type="text/css" />
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link href="css/main.css" rel="stylesheet">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -59,13 +60,13 @@
                             </div>
                         </form>
                         <%
-                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("searchResponse");;
+                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("searchResponse");
                         %>
                         
                          <% if (request.getAttribute("searchResponse")!= null) {%>
                          
-                         <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="glyphicon glyphicon-sort-by-alphabet " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
-                         <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="glyphicon glyphicon-sort-by-order " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
+                         <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
+                         <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                          <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
                          <div class="search-count">search result: <span class="total-count">
                            <%
@@ -101,9 +102,9 @@
                             %>
                             
                         </ul>
-                        
+                        </div>
                             <div id="black"  style="margin-left: 40%;">
-            </div></div>
+            </div>
                             <%
                          }
                          %>

@@ -15,4 +15,5 @@ public class Constants {
     public static final String ES_HOST = "localhost";
     public static final String URL_TABLE_NAME = "kwic";
     public static final String ES_TYPE = "urlmapping";
+    public static final String FILTER_TYPE = "searchfilter";
 }

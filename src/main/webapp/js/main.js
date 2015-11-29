@@ -40,14 +40,14 @@ function sortAlphabetically(parent, childSelector, keySelector, sortDescending) 
         var vB = $(keySelector, b).text().toLowerCase();
         return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
     });
-    $("#azSortIcon").removeClass('glyphicon-sort-by-alphabet').addClass("glyphicon-sort-by-alphabet-alt");
+    $("#azSortIcon").removeClass("fa fa-sort-alpha-asc").addClass("fa fa-sort-alpha-desc");
     if (sortDescending) {
         items.sort(function (a, b) {
             var vA = $(keySelector, a).text().toLowerCase();
             var vB = $(keySelector, b).text().toLowerCase();
             return (vA > vB) ? -1 : (vA < vB) ? 1 : 0;
         });
-        $("#azSortIcon").removeClass('glyphicon-sort-by-alphabet-alt').addClass("glyphicon-sort-by-alphabet");
+        $("#azSortIcon").removeClass("fa fa-sort-alpha-desc").addClass("fa fa-sort-alpha-asc");
     }
 
     parent.html(items);
@@ -59,14 +59,14 @@ function sortHitrate(parent, childSelector, keySelector, sortDescending) {
         var vB = $(keySelector, b).text().toLowerCase();
         return (vA < vB) ? -1 : (vA > vB) ? 1 : 0;
     });
-    $("#numSortIcon").removeClass('glyphicon-sort-by-order').addClass("glyphicon-sort-by-order-alt");
+    $("#numSortIcon").removeClass('fa fa-sort-numeric-asc').addClass("fa fa-sort-numeric-desc");
     if (sortDescending) {
         items.sort(function (a, b) {
             var vA = $(keySelector, a).text();
             var vB = $(keySelector, b).text();
             return (vA > vB) ? -1 : (vA < vB) ? 1 : 0;
         });
-        $("#numSortIcon").removeClass('glyphicon-sort-by-order-alt').addClass("glyphicon-sort-by-order");
+        $("#numSortIcon").removeClass('fa fa-sort-numeric-desc').addClass("fa fa-sort-numeric-asc");
     }
 
     parent.html(items);

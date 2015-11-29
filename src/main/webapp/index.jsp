@@ -46,7 +46,9 @@
                         <nav class="main-nav">
                             <a  href="addurl.jsp" class="butn text-center" >add url</a>
                             <a  href="search.jsp" class="butn text-center push-bit" >search url</a>
-                            <a  href="delete.jsp" class="butn text-center">delete  url</a>
+                            <form action="result" method="post">
+                                 <input type="submit" value="delete  url" name="deletepage" class="butn text-center">
+                            </form>
                             <a  href="config.jsp" class="butn text-center push-bit">user config</a>
                         </nav>
                     </div>

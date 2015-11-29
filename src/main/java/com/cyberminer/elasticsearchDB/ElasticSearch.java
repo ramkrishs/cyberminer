@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cyberminer.elastic;
+package com.cyberminer.elasticsearchDB;
 
-import static com.cyberminer.commons.Constants.URL_TABLE_NAME;
+import com.cyberminer.commons.Constants;
+import com.cyberminer.elasticsearchDB.ElasticsearchClient;
 import com.cyberminer.kwic.Alphabetizer;
 import com.cyberminer.kwic.CircularShift;
 import com.cyberminer.kwic.NoiseEliminator;
@@ -19,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
@@ -69,7 +71,7 @@ public class ElasticSearch extends HttpServlet {
                         .field("hitrate",0)
                         .endObject();
                 IndexResponse insertResponse = new IndexResponse();
-                insertResponse = escon.insert(URL_TABLE_NAME, builder);
+                insertResponse = escon.insert(Constants.ES_TYPE,builder);
                 if (insertResponse != null) {
                     request.setAttribute("insertResult", insertResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("addurl.jsp");
@@ -78,32 +80,79 @@ public class ElasticSearch extends HttpServlet {
                 }
             }
         }
+        String userConfigInput = request.getParameter("userConfigInput");
+        
+        if (request.getParameter("addConfigbtn") != null) {
+            System.out.println(userConfigInput);
+            if (!userConfigInput.isEmpty()) {
+                
+                XContentBuilder builder;
+                builder = jsonBuilder()
+                        .startObject()
+                        .field("userfilters", userConfigInput)
+                        .endObject();
+                IndexResponse insertResponse = new IndexResponse();
+                insertResponse = escon.insert(Constants.FILTER_TYPE,builder);
+                if (insertResponse.isCreated()) {
+                    
+                    request.setAttribute("filterResult", insertResponse);
+                    RequestDispatcher rd = request.getRequestDispatcher("config.jsp");
+                    rd.forward(request, response);
+                    
 
+                }
+            }
+        }
+        else if(request.getParameter("viewConfigbtn") != null) {
+                    SearchResponse searchResponse = new SearchResponse();
+                    List<String> newlist = escon.userFilterresponse();
+                    for(String i:newlist){
+                        System.out.println("value: " + i);
+                    }
+                    
+                    searchResponse = escon.getAllrecord(Constants.FILTER_TYPE);
+                    if (searchResponse != null) {
+                    List<Map<String, Object>> searchResponses = new  ArrayList();
+                    SearchHit[] results = searchResponse.getHits().getHits();
+                    
+                    for (SearchHit hit : results) {
+                        
+                        Map<String, Object> data = hit.getSource();
+                        searchResponses.add(data);
+                    }
+                    
+                    request.setAttribute("filterValueResult", searchResponses);
+                    RequestDispatcher rd = request.getRequestDispatcher("config.jsp");
+                    rd.forward(request, response);
+
+                    }
+        }
+        
         String searchString = request.getParameter("searchString");
         if (request.getParameter("search") != null) {
             if (!searchString.isEmpty()) {
                 SearchResponse searchResponse = new SearchResponse();
                 if (searchString.contains("!")) {
                     String[] newString = searchString.split(Pattern.quote("!"));
-                    searchResponse = escon.notSearch(URL_TABLE_NAME, newString[1]);
+                    searchResponse = escon.notSearch(newString[1]);
                 } else if (searchString.contains("&&")) {
                     String[] newString = searchString.split(Pattern.quote("&&"));
                     for (int i = 0; i < newString.length; i++) {
                         newString[i] = newString[i].trim();
                     }
-                    searchResponse = escon.andSearch(URL_TABLE_NAME, newString);
+                    searchResponse = escon.andSearch(newString);
                 } else {
 
-                    searchResponse = escon.orSearch(URL_TABLE_NAME, searchString);
+                    searchResponse = escon.orSearch(searchString);
 
                 }
-
+                
                 if (searchResponse != null) {
                     List<Map<String, Object>> searchResponses = new  ArrayList();
                     SearchHit[] results = searchResponse.getHits().getHits();
                     int totalHits = (int) searchResponse.getHits().totalHits();
                     for (SearchHit hit : results) {
-
+                        
                         Map<String, Object> data = hit.getSource();
                         searchResponses.add(data);
                     }
@@ -113,10 +162,33 @@ public class ElasticSearch extends HttpServlet {
                     rd.forward(request, response);
 
                 }
+                
             }
            
         }
+        
+        
+        if(request.getParameter("deletepage") != null){
+            SearchResponse searchResponse = new SearchResponse();
+            searchResponse = escon.getAllrecord(Constants.ES_TYPE);
+            if (searchResponse != null) {
+                    List<Map<String, Object>> searchResponses = new  ArrayList();
+                    SearchHit[] results = searchResponse.getHits().getHits();
+                    
+                    for (SearchHit hit : results) {
+                        
+                        Map<String, Object> data = hit.getSource();
+                        data.put("id", hit.getId());
+                        searchResponses.add(data);
+                    }
+                    
+                    request.setAttribute("searchResponse", searchResponses);
+                    RequestDispatcher rd = request.getRequestDispatcher("delete.jsp");
+                    rd.forward(request, response);
 
+            }
+        }
+    
     }
 
     /**
@@ -129,13 +201,21 @@ public class ElasticSearch extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        SearchResponse searchResponse = new SearchResponse();
-        searchResponse = escon.notSearch(URL_TABLE_NAME, "best");
-        if (searchResponse != null) {
-        String data = "Hello World!";
-        resp.setContentType("text/plain");
-        resp.setCharacterEncoding("UTF-8");
-        resp.getWriter().write(data);
-    }
+        DeleteResponse delResponse = new DeleteResponse();
+        String documentID = req.getParameter("docid");
+        //searchResponse = escon.notSearch("best");
+        if(req.getParameter("docid")!=null){
+            delResponse = escon.delete(documentID);
+        
+            if (delResponse.isFound()) {
+
+            resp.setContentType("text/plain");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(documentID);
+            }
+        }
+        
+
+        
 }
 }

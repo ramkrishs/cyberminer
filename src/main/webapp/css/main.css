@@ -93,7 +93,9 @@ nav li {
 nav a {
     margin-bottom: 30px;
 }
-
+nav input{
+    margin-bottom: 30px;
+}
 a {
     text-decoration: none;
     -webkit-transition: color .5s;

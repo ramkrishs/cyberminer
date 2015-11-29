@@ -4,6 +4,9 @@
     Author     : Ram
 --%>
 
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +15,7 @@
         <meta charset="utf-8">
         <title>Cyberminer - Delete</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/sweetalert.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -43,14 +47,47 @@
                         <a href='index.jsp'>&laquo; Back to Home</a><br>
                         <h1 class="text-center">Delete</h1>
                         <hr>
-                        <div class="move-center">
-                            <p>Click on the button remove the out-of-date url</p>
-                            <div class="move">
-                                <a  href="addurl.html" class="butn text-center " >Delete url</a>
-                            </div>
-                        </div>
+                       
+                        <table class="table">
+                            
+                            <thead>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Description</th> 
+                                    <th>Operation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("searchResponse");
+                        %>
+                        <% if (request.getAttribute("searchResponse")!= null) {%>
+                         
+                            <%
+
+                                for (Map data : searchResponses) {
+
+                                    if (data != null) {
+                            %>
+                                <tr>
+                                        <td><% out.println(data.get("url")); %></td>
+                                        <td><%
+                                    ArrayList descrip = (ArrayList) data.get("description");
+                                    System.out.println(descrip.get(0));
+                                    String documentID =(String) data.get("id");
+                                    out.println(descrip.get(descrip.size()-1)); %></td>
+                                        <td><button docid ="<% out.println(documentID); %>" class="btn btn-warning">Delete</button></td> 
+                                </tr>
+                             <%
+                                        }
+                                    }
+                            }
+                            %>
+                            </tbody>
+                        </table>
                     </div>
                     <!--/col-span-9-->
+                   
                 </div>
             </div>
             <!-- /Main -->
@@ -59,7 +96,54 @@
         <!-- script references -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+        <script src="js/vendor/sweetalert.min.js"></script>
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
+        <script>
+           $('td button').click(function() {
+               
+             var value =  $(this).attr('docid').trim();
+             
+           swal({ title: "Are you sure?",   
+               text: "You will not be able to search if you delete this url!!",   
+               type: "warning",   
+               showCancelButton: true,   
+               confirmButtonColor: "#DD6B55",   
+               confirmButtonText: "Yes, delete it!",   
+               closeOnConfirm: true }, 
+           function(){
+               calldelete(value);
+               
+              
+           });
+            
+            
+    
+    });
+    function reloadpage(){
+        window.location.reload();
+    }
+    function calldelete(value){
+       
+         $.ajax({
+             type:"GET",
+            url: "result",
+            data:{
+                "docid":value
+            },
+            success: function(response) {
+               
+               console.log("resp: " + response);
+               alert("Deleted");
+               window.location.reload();
+               //alert(location.href);
+               //swal("Good job!", "You clicked the button!", "success");
+               //window.location.href =  window.location.href;
+               //
+            }
+        });
+    }
+        </script>
+           
     </body>
 </html>

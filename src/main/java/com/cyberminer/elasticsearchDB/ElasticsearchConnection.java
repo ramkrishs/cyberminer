@@ -1,4 +1,4 @@
-package com.cyberminer.elastic;
+package com.cyberminer.elasticsearchDB;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;

@@ -5,6 +5,8 @@
  */
 package com.cyberminer.DBClient;
 
+import java.util.List;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
@@ -17,12 +19,17 @@ public interface DBClient {
 
     void closeConnection();
 
-    IndexResponse insert(String index, XContentBuilder document);
+    IndexResponse insert(String type,XContentBuilder document);
 
-    SearchResponse orSearch(String index, String document);
+    SearchResponse orSearch(String document);
 
-    SearchResponse notSearch(String index, String document);
+    SearchResponse notSearch(String document);
 
-    SearchResponse andSearch(String index, String[] document);
-
+    SearchResponse andSearch(String[] document);
+    
+    SearchResponse getAllrecord(String type);
+    
+    DeleteResponse delete(String documentID);
+    
+    public List<String> userFilterresponse();
 }

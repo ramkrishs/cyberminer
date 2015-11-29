@@ -4,6 +4,10 @@
     Author     : Ram
 --%>
 
+<%@page import="java.util.Map"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.elasticsearch.action.index.IndexResponse"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,40 +46,75 @@
                     <div class="col-sm-9 mainbar">
                         <a href='index.jsp'>&laquo; Back to Home</a><br>
                         <h1 class="text-center">user config</h1>
-                        <div class="input-group col-md-12 col-sm-12 col-xs-12 user-config ">
-                            <input type="text" class="form-control input-lg" placeholder="Enter a word / symbol to filter out" id="user_val"/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-info btn-lg" type="button" data-toggle="tooltip" data-placement="top" title="Click here to Add filter" id="gen_btn">
-                                    <i class="glyphicon glyphicon-save"></i> Add
-                                </button>
-                            </span>
-                        </div>
-                        <hr>
-                        <h3>Filter List</h3>
+                        <form method="post" action="result">
+                            <div class="input-group col-md-12 col-sm-12 col-xs-12 user-config ">
+
+                                <input type="text" class="form-control input-lg" name="userConfigInput" placeholder="Enter a word / symbol to filter out" id="user_filters"/>
+                                <span class="input-group-btn">
+                                    <button name="addConfigbtn" class="btn btn-info btn-lg" type="submit" data-toggle="tooltip" data-placement="top" title="Click here to Add filter" id="gena_btn">
+                                        <i class="glyphicon glyphicon-save"></i> Add
+                                    </button>
+                                    <button name="viewConfigbtn" class="btn btn-info btn-lg" type="submit" data-toggle="tooltip" data-placement="top" title="Click here to view filter" id="view_btn">
+                                        <i class="glyphicon glyphicon-save"></i> View
+                                    </button>
+                                </span>
+
+                            </div>
+                        </form>
+                        <%
+                            IndexResponse insertResponse = (IndexResponse) request.getAttribute("filterResult");
+                            if (insertResponse != null) {
+                                if (insertResponse.isCreated()) {
+                        %>
+                        <div class="alert alert-success text-center">
+                            <% out.println("Value Inserted!!");
+                                    } else {
+                                        out.println("Value Not Inserted!!");
+                                    }
+                                %>
+                                </div>
+<%
+                                }
+
+                            %>
+                        
+
                         <div class="result">
-                            <a class="btn btn-default">ram</a>
-                            <a class="btn btn-default">$</a>
-                            <a class="btn btn-default">Filterword</a>
-                            <a class="btn btn-default">Noshow word</a>
-                            <a class="btn btn-default">^</a>
-                            <a class="btn btn-default">&amp;</a>
-                            <a class="btn btn-default">~</a>
-                            <a class="btn btn-default">!</a>
-                            <a class="btn btn-default">@</a>
+                            <%                                  
+                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("filterValueResult");
+                            %>
+                            <hr>
+                            <% if (request.getAttribute("filterValueResult") != null) {%>
+                            <h3>Filter List</h3>
+
+
+                            <%
+
+                                for (Map data : searchResponses) {
+
+                                    if (data != null) {
+                            %>
+                            <a class="btn btn-default" style="margin-bottom: 15px;"><% out.println(data.get("userfilters")); %></a>
+                            <%
+                                        }
+                                    }
+                                }
+                            %>
                         </div>
                     </div>
                 </div>
-                <!--/col-span-9-->
             </div>
-
-            <!-- /Main -->
-            <footer class="text-center">Cyberminer ASA Project UTDallas Fall 2015</a></footer>
+            <!--/col-span-9-->
         </div>
 
-        <!-- script references -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
-        <script src="js/vendor/bootstrap.min.js"></script>
-        <script src="js/main.js"></script>
-    </body>
+        <!-- /Main -->
+        <footer class="text-center">Cyberminer ASA Project UTDallas Fall 2015</a></footer>
+</div>
+
+<!-- script references -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+<script src="js/vendor/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+</body>
 </html>
