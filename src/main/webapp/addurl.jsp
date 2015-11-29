@@ -58,9 +58,10 @@
 
                             </form>
                             <%
-                                IndexResponse insertResponse = (IndexResponse) request.getAttribute("insertResult");
-                                if (insertResponse != null) {
-                                    if (insertResponse.isCreated()) {
+                                
+                                if (request.getAttribute("insertResult") != null) {
+                                    boolean insertResponse = (boolean)request.getAttribute("insertResult");
+                                    if (insertResponse) {
                             %>
                             <div class="alert alert-success text-center">
                                 <% out.println("Value Inserted!!");

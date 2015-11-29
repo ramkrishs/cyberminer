@@ -4,6 +4,7 @@
     Author     : Ram
 --%>
 
+<%@page import="com.cyberminer.searchengine.Searchengine"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.Map"%>
@@ -59,19 +60,27 @@
                                 </span>
                             </div>
                         </form>
-                        <%
-                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("searchResponse");
-                        %>
+                        
                         
                          <% if (request.getAttribute("searchResponse")!= null) {%>
-                         
+                         <%
+                            List<Searchengine>  searchResponses = (ArrayList) request.getAttribute("searchResponse");
+                        %>
                          <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                          <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                          <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
                          <div class="search-count">search result: <span class="total-count">
                            <%
-                                int totalHits = (int) request.getAttribute("searchResult");
-                                out.println(totalHits); 
+                            
+                            if(searchResponses.size() > 0){
+                                Searchengine totalhit = searchResponses.get(0);
+                                
+                                    out.println(totalhit.getTotalhits()); 
+                                }
+                                else{
+                                     out.println(0); 
+                                }
+                                
                             %></span>
                         </div>
                        
@@ -81,17 +90,16 @@
                             <ul id="list">
                             <%
 
-                                for (Map data : searchResponses) {
+                                for (Searchengine data : searchResponses) {
 
                                     if (data != null) {
                             %>
                             
-                            <li><a href="<% out.println(data.get("url")); %>" target="_blank"><% out.println(data.get("url")); %></a>
+                            <li><a href="<% out.println(data.getUrl()); %>" target="_blank"><% out.println(data.getUrl()); %></a>
                                 <p id="de"><%
-                                    ArrayList descrip = (ArrayList) data.get("description");
-                                    System.out.println(descrip.get(0));
-                                    out.println(descrip.get(descrip.size()-1)); %></p>
-                                <div id="hitrate" style="display: none;"><% out.println(data.get("hitrate")); %></div>
+                                    
+                                    out.println(data.getDescription()); %></p>
+                                <div id="hitrate" style="display: none;"><% out.println(data.getHitrate()); %></div>
                             </li>
                             
                             <%

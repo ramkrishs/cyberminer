@@ -10,6 +10,8 @@ import com.cyberminer.elasticsearchDB.ElasticsearchClient;
 import com.cyberminer.kwic.Alphabetizer;
 import com.cyberminer.kwic.CircularShift;
 import com.cyberminer.kwic.NoiseEliminator;
+import com.cyberminer.searchengine.Searchengine;
+import com.cyberminer.searchengine.UserFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,9 +72,10 @@ public class ElasticSearch extends HttpServlet {
                         .field("description", alphalist)
                         .field("hitrate",0)
                         .endObject();
-                IndexResponse insertResponse = new IndexResponse();
+                
+                boolean  insertResponse = false;
                 insertResponse = escon.insert(Constants.ES_TYPE,builder);
-                if (insertResponse != null) {
+                if (insertResponse) {
                     request.setAttribute("insertResult", insertResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("addurl.jsp");
                     rd.forward(request, response);
@@ -91,9 +94,9 @@ public class ElasticSearch extends HttpServlet {
                         .startObject()
                         .field("userfilters", userConfigInput)
                         .endObject();
-                IndexResponse insertResponse = new IndexResponse();
+                boolean  insertResponse = false;
                 insertResponse = escon.insert(Constants.FILTER_TYPE,builder);
-                if (insertResponse.isCreated()) {
+                if (insertResponse) {
                     
                     request.setAttribute("filterResult", insertResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("config.jsp");
@@ -104,24 +107,10 @@ public class ElasticSearch extends HttpServlet {
             }
         }
         else if(request.getParameter("viewConfigbtn") != null) {
-                    SearchResponse searchResponse = new SearchResponse();
-                    List<String> newlist = escon.userFilterresponse();
-                    for(String i:newlist){
-                        System.out.println("value: " + i);
-                    }
                     
-                    searchResponse = escon.getAllrecord(Constants.FILTER_TYPE);
-                    if (searchResponse != null) {
-                    List<Map<String, Object>> searchResponses = new  ArrayList();
-                    SearchHit[] results = searchResponse.getHits().getHits();
-                    
-                    for (SearchHit hit : results) {
-                        
-                        Map<String, Object> data = hit.getSource();
-                        searchResponses.add(data);
-                    }
-                    
-                    request.setAttribute("filterValueResult", searchResponses);
+                    List<UserFilter> filterlist = escon.userFilterresponse();
+                    if (filterlist != null) {
+                    request.setAttribute("filterValueResult", filterlist);
                     RequestDispatcher rd = request.getRequestDispatcher("config.jsp");
                     rd.forward(request, response);
 
@@ -131,7 +120,7 @@ public class ElasticSearch extends HttpServlet {
         String searchString = request.getParameter("searchString");
         if (request.getParameter("search") != null) {
             if (!searchString.isEmpty()) {
-                SearchResponse searchResponse = new SearchResponse();
+                List<Searchengine> searchResponse = new  ArrayList();
                 if (searchString.contains("!")) {
                     String[] newString = searchString.split(Pattern.quote("!"));
                     searchResponse = escon.notSearch(newString[1]);
@@ -148,16 +137,8 @@ public class ElasticSearch extends HttpServlet {
                 }
                 
                 if (searchResponse != null) {
-                    List<Map<String, Object>> searchResponses = new  ArrayList();
-                    SearchHit[] results = searchResponse.getHits().getHits();
-                    int totalHits = (int) searchResponse.getHits().totalHits();
-                    for (SearchHit hit : results) {
-                        
-                        Map<String, Object> data = hit.getSource();
-                        searchResponses.add(data);
-                    }
-                    request.setAttribute("searchResult", totalHits);
-                    request.setAttribute("searchResponse", searchResponses);
+                    
+                    request.setAttribute("searchResponse", searchResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
                     rd.forward(request, response);
 
@@ -169,20 +150,10 @@ public class ElasticSearch extends HttpServlet {
         
         
         if(request.getParameter("deletepage") != null){
-            SearchResponse searchResponse = new SearchResponse();
+            List<Searchengine> searchResponse = new  ArrayList();
             searchResponse = escon.getAllrecord(Constants.ES_TYPE);
-            if (searchResponse != null) {
-                    List<Map<String, Object>> searchResponses = new  ArrayList();
-                    SearchHit[] results = searchResponse.getHits().getHits();
-                    
-                    for (SearchHit hit : results) {
-                        
-                        Map<String, Object> data = hit.getSource();
-                        data.put("id", hit.getId());
-                        searchResponses.add(data);
-                    }
-                    
-                    request.setAttribute("searchResponse", searchResponses);
+                if (searchResponse != null) {
+                    request.setAttribute("searchResponse", searchResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("delete.jsp");
                     rd.forward(request, response);
 
@@ -201,13 +172,13 @@ public class ElasticSearch extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        DeleteResponse delResponse = new DeleteResponse();
+        boolean delResponse = false;
         String documentID = req.getParameter("docid");
         //searchResponse = escon.notSearch("best");
         if(req.getParameter("docid")!=null){
             delResponse = escon.delete(documentID);
         
-            if (delResponse.isFound()) {
+            if (delResponse) {
 
             resp.setContentType("text/plain");
             resp.setCharacterEncoding("UTF-8");

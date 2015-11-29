@@ -4,6 +4,7 @@
     Author     : Ram
 --%>
 
+<%@page import="com.cyberminer.searchengine.Searchengine"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -58,25 +59,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <%
-                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("searchResponse");
-                        %>
+                                
                         <% if (request.getAttribute("searchResponse")!= null) {%>
-                         
+                         <%
+                            List<Searchengine>  searchResponses = (ArrayList) request.getAttribute("searchResponse");
+                        %>
                             <%
 
-                                for (Map data : searchResponses) {
+                                for (Searchengine data : searchResponses) {
 
                                     if (data != null) {
                             %>
                                 <tr>
-                                        <td><% out.println(data.get("url")); %></td>
+                                        <td><% out.println(data.getUrl()); %></td>
                                         <td><%
-                                    ArrayList descrip = (ArrayList) data.get("description");
-                                    System.out.println(descrip.get(0));
-                                    String documentID =(String) data.get("id");
-                                    out.println(descrip.get(descrip.size()-1)); %></td>
-                                        <td><button docid ="<% out.println(documentID); %>" class="btn btn-warning">Delete</button></td> 
+                                    out.println(data.getDescription()); %></td>
+                                        <td><button docid ="<% out.println(data.getId()); %>" class="btn btn-warning">Delete</button></td> 
                                 </tr>
                              <%
                                         }

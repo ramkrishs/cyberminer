@@ -4,6 +4,7 @@
     Author     : Ram
 --%>
 
+<%@page import="com.cyberminer.searchengine.UserFilter"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -62,9 +63,10 @@
                             </div>
                         </form>
                         <%
-                            IndexResponse insertResponse = (IndexResponse) request.getAttribute("filterResult");
-                            if (insertResponse != null) {
-                                if (insertResponse.isCreated()) {
+                           
+                            if (request.getAttribute("filterResult")!= null) {
+                                boolean insertResponse = (boolean) request.getAttribute("filterResult");
+                                if (insertResponse) {
                         %>
                         <div class="alert alert-success text-center">
                             <% out.println("Value Inserted!!");
@@ -80,21 +82,21 @@
                         
 
                         <div class="result">
-                            <%                                  
-                            List<Map<String, Object>> searchResponses = (ArrayList) request.getAttribute("filterValueResult");
-                            %>
+                            
                             <hr>
                             <% if (request.getAttribute("filterValueResult") != null) {%>
                             <h3>Filter List</h3>
-
+                            <%                                  
+                            List<UserFilter> searchResponses = (ArrayList) request.getAttribute("filterValueResult");
+                            %>
 
                             <%
 
-                                for (Map data : searchResponses) {
+                                for (UserFilter data : searchResponses) {
 
                                     if (data != null) {
                             %>
-                            <a class="btn btn-default" style="margin-bottom: 15px;"><% out.println(data.get("userfilters")); %></a>
+                            <a class="btn btn-default" style="margin-bottom: 15px;"><% out.println(data.getUserFilter()); %></a>
                             <%
                                         }
                                     }
