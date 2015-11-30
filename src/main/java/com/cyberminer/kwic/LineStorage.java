@@ -19,5 +19,5 @@ public class LineStorage {
     public void setLines(String line) {
         this.lines.add(line);
     }
-    
+
 }

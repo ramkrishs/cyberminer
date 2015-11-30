@@ -58,9 +58,9 @@
 
                             </form>
                             <%
-                                
+
                                 if (request.getAttribute("insertResult") != null) {
-                                    boolean insertResponse = (boolean)request.getAttribute("insertResult");
+                                    boolean insertResponse = (boolean) request.getAttribute("insertResult");
                                     if (insertResponse) {
                             %>
                             <div class="alert alert-success text-center">

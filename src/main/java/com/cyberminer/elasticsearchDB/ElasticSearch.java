@@ -13,7 +13,9 @@ import com.cyberminer.kwic.NoiseEliminator;
 import com.cyberminer.searchengine.Searchengine;
 import com.cyberminer.searchengine.UserFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -28,6 +30,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.json.JSONObject;
 
 /**
  *
@@ -37,8 +40,8 @@ import org.elasticsearch.search.SearchHit;
  */
 public class ElasticSearch extends HttpServlet {
 
-    
-   ElasticsearchClient escon = new ElasticsearchClient();
+    ElasticsearchClient escon = new ElasticsearchClient();
+
     /**
      *
      * @param request
@@ -53,9 +56,9 @@ public class ElasticSearch extends HttpServlet {
         String stringName = request.getParameter("userDescription");
         String urlvalue = request.getParameter("urlString");
         if (request.getParameter("insert") != null) {
-            
+
             if (!stringName.isEmpty() && !urlvalue.isEmpty()) {
-                
+
                 CircularShift csObject = new CircularShift();
                 Alphabetizer alphabetizerObject = new Alphabetizer();
                 NoiseEliminator noiseElimatorObject = new NoiseEliminator();
@@ -70,11 +73,11 @@ public class ElasticSearch extends HttpServlet {
                         .startObject()
                         .field("url", urlvalue)
                         .field("description", alphalist)
-                        .field("hitrate",0)
+                        .field("hitrate", 0)
                         .endObject();
-                
-                boolean  insertResponse = false;
-                insertResponse = escon.insert(Constants.ES_TYPE,builder);
+
+                boolean insertResponse = false;
+                insertResponse = escon.insert(Constants.ES_TYPE, builder);
                 if (insertResponse) {
                     request.setAttribute("insertResult", insertResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("addurl.jsp");
@@ -84,43 +87,42 @@ public class ElasticSearch extends HttpServlet {
             }
         }
         String userConfigInput = request.getParameter("userConfigInput");
-        
+
         if (request.getParameter("addConfigbtn") != null) {
             System.out.println(userConfigInput);
             if (!userConfigInput.isEmpty()) {
-                
+
                 XContentBuilder builder;
                 builder = jsonBuilder()
                         .startObject()
                         .field("userfilters", userConfigInput)
                         .endObject();
-                boolean  insertResponse = false;
-                insertResponse = escon.insert(Constants.FILTER_TYPE,builder);
+                boolean insertResponse = false;
+                insertResponse = escon.insert(Constants.FILTER_TYPE, builder);
                 if (insertResponse) {
-                    
+
                     request.setAttribute("filterResult", insertResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("config.jsp");
                     rd.forward(request, response);
-                    
 
                 }
             }
-        }
-        else if(request.getParameter("viewConfigbtn") != null) {
-                    
-                    List<UserFilter> filterlist = escon.userFilterresponse();
-                    if (filterlist != null) {
-                    request.setAttribute("filterValueResult", filterlist);
-                    RequestDispatcher rd = request.getRequestDispatcher("config.jsp");
-                    rd.forward(request, response);
+        } else if (request.getParameter("viewConfigbtn") != null) {
 
-                    }
+            List<UserFilter> filterlist = escon.userFilterresponse();
+            escon.getKeywords();
+            if (filterlist != null) {
+                request.setAttribute("filterValueResult", filterlist);
+                RequestDispatcher rd = request.getRequestDispatcher("config.jsp");
+                rd.forward(request, response);
+
+            }
         }
-        
+
         String searchString = request.getParameter("searchString");
         if (request.getParameter("search") != null) {
             if (!searchString.isEmpty()) {
-                List<Searchengine> searchResponse = new  ArrayList();
+                List<Searchengine> searchResponse = new ArrayList();
                 if (searchString.contains("!")) {
                     String[] newString = searchString.split(Pattern.quote("!"));
                     searchResponse = escon.notSearch(newString[1]);
@@ -135,31 +137,50 @@ public class ElasticSearch extends HttpServlet {
                     searchResponse = escon.orSearch(searchString);
 
                 }
-                
+
                 if (searchResponse != null) {
-                    
+
                     request.setAttribute("searchResponse", searchResponse);
                     RequestDispatcher rd = request.getRequestDispatcher("search.jsp");
                     rd.forward(request, response);
 
                 }
-                
+
             }
-           
+
         }
-        
-        
-        if(request.getParameter("deletepage") != null){
-            List<Searchengine> searchResponse = new  ArrayList();
+
+        if (request.getParameter("deletepage") != null) {
+            List<Searchengine> searchResponse = new ArrayList();
             searchResponse = escon.getAllrecord(Constants.ES_TYPE);
-                if (searchResponse != null) {
-                    request.setAttribute("searchResponse", searchResponse);
-                    RequestDispatcher rd = request.getRequestDispatcher("delete.jsp");
-                    rd.forward(request, response);
+            if (searchResponse != null) {
+                request.setAttribute("searchResponse", searchResponse);
+                RequestDispatcher rd = request.getRequestDispatcher("delete.jsp");
+                rd.forward(request, response);
 
             }
         }
-    
+        
+        if ((request.getParameter("tokenvalues")).equals("1")) {
+            System.out.println("ajax worked ");
+            List<String> uniqueTokens = new ArrayList<>();
+            uniqueTokens = escon.getKeywords();
+            System.out.println("in servelter");
+            System.out.println(uniqueTokens);
+            String [] newlist = uniqueTokens.toArray(new String[uniqueTokens.size()]);
+            String ss = request.getParameter("tokenvalues");
+            System.out.println(ss);
+            request.setAttribute("ss", ss);
+            response.setContentType("application/json");
+           
+            PrintWriter out = response.getWriter();
+            out.write(Arrays.toString(newlist));
+           
+
+           
+        }
+        
+
     }
 
     /**
@@ -175,18 +196,17 @@ public class ElasticSearch extends HttpServlet {
         boolean delResponse = false;
         String documentID = req.getParameter("docid");
         //searchResponse = escon.notSearch("best");
-        if(req.getParameter("docid")!=null){
+        if (req.getParameter("docid") != null) {
             delResponse = escon.delete(documentID);
-        
+
             if (delResponse) {
 
-            resp.setContentType("text/plain");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(documentID);
+                resp.setContentType("text/plain");
+                resp.setCharacterEncoding("UTF-8");
+                resp.getWriter().write(documentID);
             }
         }
         
 
-        
-}
+    }
 }

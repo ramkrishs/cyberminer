@@ -10,7 +10,7 @@ package com.cyberminer.searchengine;
  * @author John
  */
 public class UserFilter {
-    
+
     private String filterID;
     private String userFilter;
 

@@ -10,7 +10,7 @@ package com.cyberminer.searchengine;
  * @author John
  */
 public class Searchengine {
-    
+
     private String id;
     private String url;
     private String description;
@@ -86,7 +86,5 @@ public class Searchengine {
     public void setTotalhits(int totalhits) {
         this.totalhits = totalhits;
     }
-    
-    
-    
+
 }

@@ -15,7 +15,7 @@
         <link href="css/main.css" rel="stylesheet">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
-        
+
 
     </head>
     <body>
@@ -47,7 +47,7 @@
                             <a  href="addurl.jsp" class="butn text-center" >add url</a>
                             <a  href="search.jsp" class="butn text-center push-bit" >search url</a>
                             <form action="result" method="post">
-                                 <input type="submit" value="delete  url" name="deletepage" class="butn text-center">
+                                <input type="submit" value="delete  url" name="deletepage" class="butn text-center">
                             </form>
                             <a  href="config.jsp" class="butn text-center push-bit">user config</a>
                         </nav>
@@ -59,33 +59,32 @@
             <footer class="text-center">Cyberminer ASA Project UTDallas Fall 2015</a></footer>
             <!-- script references -->
         </div>
-        
+
         <script src="js/vendor/jquery-1.11.2.js" ></script>
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
-       
-        <% 
-            if(session.isNew()){
-                session.setAttribute("siteSession", "cyberminer");
-         %>
-          <script>
-         window.onload = function () {
-  $.get('result', function(data) {
-        
-        console.log(data);
-    });
-   
-};
 
-<%
-            }
-            else{
-              %>   
-                 console.log("data");
-                              <%
-            }
-        
+        <%
+            if (session.isNew()) {
+                session.setAttribute("siteSession", "cyberminer");
         %>
-</script>
+        <script>
+            window.onload = function () {
+                $.get('result', function (data) {
+
+                    console.log(data);
+                });
+
+            };
+
+            <%
+            } else {
+            %>
+            console.log("data");
+            <%
+                }
+
+            %>
+        </script>
     </body>
 </html>

@@ -4,6 +4,7 @@
     Author     : Ram
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="com.cyberminer.searchengine.Searchengine"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -17,6 +18,7 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <title>Cyberminer - Search</title>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link href="css/smartpaginator.css" rel="stylesheet" type="text/css" />
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -60,62 +62,47 @@
                                 </span>
                             </div>
                         </form>
-                        
-                        
-                         <% if (request.getAttribute("searchResponse")!= null) {%>
-                         <%
-                            List<Searchengine>  searchResponses = (ArrayList) request.getAttribute("searchResponse");
+
+
+                        <% if (request.getAttribute("searchResponse") != null) {%>
+                        <%
+                            List<Searchengine> searchResponses = (ArrayList) request.getAttribute("searchResponse");
                         %>
-                         <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
-                         <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
-                         <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
-                         <div class="search-count">search result: <span class="total-count">
-                           <%
-                            
-                            if(searchResponses.size() > 0){
-                                Searchengine totalhit = searchResponses.get(0);
-                                
-                                    out.println(totalhit.getTotalhits()); 
-                                }
-                                else{
-                                     out.println(0); 
-                                }
-                                
-                            %></span>
+                        <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
+                        <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
+                        <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
+                        <div class="search-count">search result: <span class="total-count">
+                                <%
+                                    if (searchResponses.size() > 0) {
+                                        Searchengine totalhit = searchResponses.get(0);
+
+                                        out.println(totalhit.getTotalhits());
+                                    } else {
+                                        out.println(0);
+                                    }
+
+                                %></span>
                         </div>
-                       
+
                         <hr>
                         <h3 class="search-count">Search Result</h3>
                         <div class="search-result">
                             <ul id="list">
-                            <%
+                                <c:forEach items="${searchResponse}" var="data">
+                                    <li>
+                                        <a href="<c:out value='${data.getUrl()}'></c:out>" target="_blank"><c:out value='${data.getUrl()}'></c:out></a>
+                                        <p id="de"><c:out value='${data.getDescription()}'></c:out></p>
+                                        <div id="hitrate" style="display: none;"><c:out value='${data.getHitrate()}'></c:out></div>
+                                        </li>
+                                </c:forEach>
 
-                                for (Searchengine data : searchResponses) {
 
-                                    if (data != null) {
-                            %>
-                            
-                            <li><a href="<% out.println(data.getUrl()); %>" target="_blank"><% out.println(data.getUrl()); %></a>
-                                <p id="de"><%
-                                    
-                                    out.println(data.getDescription()); %></p>
-                                <div id="hitrate" style="display: none;"><% out.println(data.getHitrate()); %></div>
-                            </li>
-                            
-                            <%
-                                        }
-                                    }
-                            
-                            
-                            %>
-                            
-                        </ul>
+                            </ul>
                         </div>
-                            <div id="black"  style="margin-left: 40%;">
-            </div>
-                            <%
-                         }
-                         %>
+                        <div id="black"  style="margin-left: 40%;">
+                        </div>
+                        <%                                }
+                        %>
                     </div>
                     <!--/col-span-9-->
                 </div>
@@ -124,18 +111,102 @@
             <footer class="text-center">Cyberminer ASA Project UTDallas Fall 2015</a></footer>
         </div>
         <!-- script references -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script src="js/smartpaginator.js" type="text/javascript"></script>
         <script src="js/vendor/bootstrap.min.js"></script>
         <script>
             var totalCount = Number($('.total-count').text().trim());
             console.log(totalCount);
-            $('#black').smartpaginator({ totalrecords: totalCount, recordsperpage: 5, datacontainer: 'list', dataelement: 'li', initval: 0, next: 'Next', prev: 'Prev', first: 'First', last: 'Last', theme: 'black' });
+            $('#black').smartpaginator({totalrecords: totalCount, recordsperpage: 5, datacontainer: 'list', dataelement: 'li', initval: 0, next: 'Next', prev: 'Prev', first: 'First', last: 'Last', theme: 'black'});
+
+
         </script>
-        
-        
+        <script>
+            $(function () {
+                var availableTags = [
+                    "ActionScript",
+                    "AppleScript",
+                    "Asp",
+                    "BASIC",
+                    "C",
+                    "C++",
+                    "Clojure",
+                    "COBOL",
+                    "ColdFusion",
+                    "Erlang",
+                    "Fortran",
+                    "Groovy",
+                    "Haskell",
+                    "Java",
+                    "JavaScript",
+                    "Lisp",
+                    "Perl",
+                    "PHP",
+                    "Python",
+                    "Ruby",
+                    "Scala",
+                    "Scheme"
+                ];
+                function split(val) {
+                    return val.split(/ \s*/);
+                }
+                function extractLast(term) {
+                    return split(term).pop();
+                }
+
+                $("#SearchString")
+                        // don't navigate away from the field on tab when selecting an item
+                        .bind("keydown", function (event) {
+                            if (event.keyCode === $.ui.keyCode.TAB &&
+                                    $(this).autocomplete("instance").menu.active) {
+                                event.preventDefault();
+                            }
+                        })
+                        .autocomplete({
+                            minLength: 0,
+                            source: function (request, response) {
+                                // delegate back to autocomplete, but extract the last term
+                                response($.ui.autocomplete.filter(
+                                        availableTags, extractLast(request.term)));
+                            },
+                            focus: function () {
+                                // prevent value inserted on focus
+                                return false;
+                            },
+                            select: function (event, ui) {
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                // add the selected item
+                                terms.push(ui.item.value);
+                                // add placeholder to get the comma-and-space at the end
+                                terms.push("");
+                                this.value = terms.join(" ");
+                                return false;
+                            }
+                        });
+            });
+        </script>
         <script src="js/main.js"></script>
+        <script>
+           var value = "1";
+           $.ajax({
+               url: '/cyberminer/result',
+               data: {
+                   "tokenvalues": value
+               },
+               type: 'post',
+               success: function (res) {
+
+                   console.log(typeof (res));
+
+
+               }
+
+           });
+        </script>
     </body>
 </html>
 

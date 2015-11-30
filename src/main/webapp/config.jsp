@@ -59,39 +59,31 @@
                                         <i class="glyphicon glyphicon-save"></i> View
                                     </button>
                                 </span>
-
                             </div>
                         </form>
                         <%
-                           
-                            if (request.getAttribute("filterResult")!= null) {
+                            if (request.getAttribute("filterResult") != null) {
                                 boolean insertResponse = (boolean) request.getAttribute("filterResult");
                                 if (insertResponse) {
                         %>
                         <div class="alert alert-success text-center">
                             <% out.println("Value Inserted!!");
-                                    } else {
-                                        out.println("Value Not Inserted!!");
-                                    }
-                                %>
-                                </div>
-<%
+                                } else {
+                                    out.println("Value Not Inserted!!");
                                 }
-
                             %>
-                        
+                        </div>
+                        <%
+                            }
 
+                        %>
                         <div class="result">
-                            
                             <hr>
                             <% if (request.getAttribute("filterValueResult") != null) {%>
                             <h3>Filter List</h3>
-                            <%                                  
-                            List<UserFilter> searchResponses = (ArrayList) request.getAttribute("filterValueResult");
-                            %>
-
                             <%
-
+                                List<UserFilter> searchResponses = (ArrayList) request.getAttribute("filterValueResult");
+                            
                                 for (UserFilter data : searchResponses) {
 
                                     if (data != null) {
@@ -101,6 +93,7 @@
                                         }
                                     }
                                 }
+
                             %>
                         </div>
                     </div>

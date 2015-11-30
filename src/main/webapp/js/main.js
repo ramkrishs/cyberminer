@@ -12,7 +12,7 @@ $(document).ready(function () {
 
         $("resu").html($("#drpdown").val());
     });
-     var desc = false;
+    var desc = false;
     document.getElementById("azSort").onclick = function () {
         sortAlphabetically($('#list'), "li", "p", desc);
         desc = !desc;

@@ -48,9 +48,9 @@
                         <a href='index.jsp'>&laquo; Back to Home</a><br>
                         <h1 class="text-center">Delete</h1>
                         <hr>
-                       
+
                         <table class="table">
-                            
+
                             <thead>
                                 <tr>
                                     <th>URL</th>
@@ -59,33 +59,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
-                        <% if (request.getAttribute("searchResponse")!= null) {%>
-                         <%
-                            List<Searchengine>  searchResponses = (ArrayList) request.getAttribute("searchResponse");
-                        %>
-                            <%
 
-                                for (Searchengine data : searchResponses) {
+                                <% if (request.getAttribute("searchResponse") != null) {%>
+                                <%
+                                    List<Searchengine> searchResponses = (ArrayList) request.getAttribute("searchResponse");
+                                %>
+                                <%
+                                    for (Searchengine data : searchResponses) {
 
-                                    if (data != null) {
-                            %>
+                                        if (data != null) {
+                                %>
                                 <tr>
-                                        <td><% out.println(data.getUrl()); %></td>
-                                        <td><%
-                                    out.println(data.getDescription()); %></td>
-                                        <td><button docid ="<% out.println(data.getId()); %>" class="btn btn-warning">Delete</button></td> 
+                                    <td><% out.println(data.getUrl()); %></td>
+                                    <td><%
+                                        out.println(data.getDescription()); %></td>
+                                    <td><button docid ="<% out.println(data.getId()); %>" class="btn btn-warning">Delete</button></td> 
                                 </tr>
-                             <%
+                                <%
+                                            }
                                         }
                                     }
-                            }
-                            %>
+                                %>
                             </tbody>
                         </table>
                     </div>
                     <!--/col-span-9-->
-                   
+
                 </div>
             </div>
             <!-- /Main -->
@@ -98,50 +97,50 @@
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
         <script>
-           $('td button').click(function() {
-               
-             var value =  $(this).attr('docid').trim();
-             
-           swal({ title: "Are you sure?",   
-               text: "You will not be able to search if you delete this url!!",   
-               type: "warning",   
-               showCancelButton: true,   
-               confirmButtonColor: "#DD6B55",   
-               confirmButtonText: "Yes, delete it!",   
-               closeOnConfirm: true }, 
-           function(){
-               calldelete(value);
-               
-              
-           });
-            
-            
-    
-    });
-    function reloadpage(){
-        window.location.reload();
-    }
-    function calldelete(value){
-       
-         $.ajax({
-             type:"GET",
-            url: "result",
-            data:{
-                "docid":value
-            },
-            success: function(response) {
-               
-               console.log("resp: " + response);
-               alert("Deleted");
-               window.location.reload();
-               //alert(location.href);
-               //swal("Good job!", "You clicked the button!", "success");
-               //window.location.href =  window.location.href;
-               //
+            $('td button').click(function () {
+
+                var value = $(this).attr('docid').trim();
+
+                swal({title: "Are you sure?",
+                    text: "You will not be able to search if you delete this url!!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: true},
+                function () {
+                    calldelete(value);
+
+
+                });
+
+
+
+            });
+            function reloadpage() {
+                window.location.reload();
             }
-        });
-    }
+            function calldelete(value) {
+
+                $.ajax({
+                    type: "GET",
+                    url: "result",
+                    data: {
+                        "docid": value
+                    },
+                    success: function (response) {
+
+                        console.log("resp: " + response);
+                        alert("Deleted");
+                        window.location.reload();
+                        //alert(location.href);
+                        //swal("Good job!", "You clicked the button!", "success");
+                        //window.location.href =  window.location.href;
+                        //
+                    }
+                });
+            }
         </script>
-           
+
     </body>
 </html>

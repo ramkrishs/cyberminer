@@ -21,17 +21,17 @@ public interface DBClient {
 
     void closeConnection();
 
-    boolean insert(String type,XContentBuilder document);
+    boolean insert(String type, XContentBuilder document);
 
     List<Searchengine> orSearch(String document);
 
     List<Searchengine> notSearch(String document);
 
     List<Searchengine> andSearch(String[] document);
-    
+
     List<Searchengine> getAllrecord(String type);
-    
+
     boolean delete(String documentID);
-    
-    List<UserFilter>userFilterresponse();
+
+    List<UserFilter> userFilterresponse();
 }
