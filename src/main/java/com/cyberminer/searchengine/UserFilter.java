@@ -1,6 +1,5 @@
 package com.cyberminer.searchengine;
 
-
 public class UserFilter {
 
     private String filterID;

@@ -110,18 +110,9 @@
                     closeOnConfirm: true},
                 function () {
                     calldelete(value);
-
-
                 });
-
-
-
             });
-            function reloadpage() {
-                window.location.reload();
-            }
             function calldelete(value) {
-
                 $.ajax({
                     type: "GET",
                     url: "result",
@@ -133,10 +124,6 @@
                         console.log("resp: " + response);
                         alert("Deleted");
                         window.location.reload();
-                        //alert(location.href);
-                        //swal("Good job!", "You clicked the button!", "success");
-                        //window.location.href =  window.location.href;
-                        //
                     }
                 });
             }

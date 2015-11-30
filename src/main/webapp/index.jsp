@@ -59,32 +59,8 @@
             <footer class="text-center">Cyberminer ASA Project UTDallas Fall 2015</a></footer>
             <!-- script references -->
         </div>
-
         <script src="js/vendor/jquery-1.11.2.js" ></script>
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
-
-        <%
-            if (session.isNew()) {
-                session.setAttribute("siteSession", "cyberminer");
-        %>
-        <script>
-            window.onload = function () {
-                $.get('result', function (data) {
-
-                    console.log(data);
-                });
-
-            };
-
-            <%
-            } else {
-            %>
-            console.log("data");
-            <%
-                }
-
-            %>
-        </script>
     </body>
 </html>

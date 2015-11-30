@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cyberminer.elasticsearchDB;
+package com.cyberminer.searchengine;
 
 import com.cyberminer.commons.Constants;
+import com.cyberminer.elasticsearchDB.ElasticsearchClient;
 import com.cyberminer.elasticsearchDB.ElasticsearchClient;
 import com.cyberminer.kwic.Alphabetizer;
 import com.cyberminer.kwic.CircularShift;
@@ -31,7 +32,7 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
  * @author Ramakrishnan Sathyavageeswaran
  * @author Vaidehi Jariwala Fall 2015 - CS 6362.001
  */
-public class ElasticSearch extends HttpServlet {
+public class CyberminerController extends HttpServlet {
 
     ElasticsearchClient escon = new ElasticsearchClient();
 
@@ -128,14 +129,13 @@ public class ElasticSearch extends HttpServlet {
                 } else {
                     String[] newString = searchString.split(Pattern.quote(" "));
                     String searchstring;
-                    for (int i = 0; i < newString.length; i++) {
-                        searchstring = newString[i].trim() ;
+                    for (String newString1 : newString) {
+                        searchstring = newString1.trim();
                     }
                     searchstring = String.join(" ", newString);
                     searchResponse = escon.orSearch(searchstring);
 
                 }
-
                 if (searchResponse != null) {
 
                     request.setAttribute("searchResponse", searchResponse);
@@ -143,9 +143,7 @@ public class ElasticSearch extends HttpServlet {
                     rd.forward(request, response);
 
                 }
-
             }
-
         }
 
         if (request.getParameter("deletepage") != null) {
@@ -153,12 +151,12 @@ public class ElasticSearch extends HttpServlet {
             searchResponse = escon.getAllrecord(Constants.ES_TYPE);
             if (searchResponse != null) {
                 request.setAttribute("searchResponse", searchResponse);
-                RequestDispatcher rd = request.getRequestDispatcher("delete.jsp");
-                rd.forward(request, response);
+                RequestDispatcher rd1 = request.getRequestDispatcher("delete.jsp");
+                rd1.forward(request, response);
 
             }
         }
-        
+
         if ((request.getParameter("tokenvalues")).equals("1")) {
             System.out.println("ajax worked ");
             List<String> uniqueTokens = new ArrayList<>();
@@ -168,12 +166,8 @@ public class ElasticSearch extends HttpServlet {
             response.setContentType("application/json");
             String keyWords = new Gson().toJson(uniqueTokens);
             response.getWriter().write(keyWords);
-            
-           
 
-           
         }
-        
 
     }
 
@@ -200,7 +194,6 @@ public class ElasticSearch extends HttpServlet {
                 resp.getWriter().write(documentID);
             }
         }
-        
 
     }
 }

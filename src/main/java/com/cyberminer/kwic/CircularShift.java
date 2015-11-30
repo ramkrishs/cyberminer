@@ -15,9 +15,9 @@ public class CircularShift {
 
     LineStorage newObj = new LineStorage();
     private ArrayList<String> csOutput = new ArrayList<>();
-    
+
     public void doCircularShift(String lines) {
-        try{
+        try {
             ArrayDeque<String> cslines = new ArrayDeque<>(Arrays.asList(lines.split(" ")));
             newObj.setLines(lines);
             for (int i = 0; i < cslines.size() - 1; i++) {
@@ -30,11 +30,9 @@ public class CircularShift {
                 }
                 newObj.setLines(joiner.toString());
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.err.println("Exception in doCircularShift " + e.getMessage());
         }
-        
 
     }
 

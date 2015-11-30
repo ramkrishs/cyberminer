@@ -57,22 +57,9 @@
                                 <input type="submit" value="Add URL" name="insert" class="butn">
 
                             </form>
-                            <%
-
-                                if (request.getAttribute("insertResult") != null) {
-                                    boolean insertResponse = (boolean) request.getAttribute("insertResult");
-                                    if (insertResponse) {
-                            %>
-                            <div class="alert alert-success text-center">
-                                <% out.println("Value Inserted!!");
-                                        } else {
-                                            out.println("Value Not Inserted!!");
-                                        }
-
-                                    }
-
-                                %>
-                            </div>
+                            <c:if test="${not empty insertResult}" >
+                                <c:out val="Inserted!!"></c:out>
+                            </c:if>
                         </div>
                     </div>
                     <!--/col-span-9-->

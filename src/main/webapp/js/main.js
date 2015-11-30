@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-
+    $('input.floatlabel').floatlabel();
     $('.btn-link').popover();
 
     $('.btn-link').on('click', function (e) {
@@ -23,6 +23,53 @@ $(document).ready(function () {
         desc = !desc;
         return false;
     };
+
+    $('td button').click(function () {
+
+        var value = $(this).attr('docid').trim();
+
+        swal({title: "Are you sure?",
+            text: "You will not be able to search if you delete this url!!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: true},
+        function () {
+            calldelete(value);
+
+
+        });
+
+
+
+    });
+
+    function reloadpage() {
+        window.location.reload();
+    }
+    function calldelete(value) {
+
+        $.ajax({
+            type: "GET",
+            url: "result",
+            data: {
+                "docid": value
+            },
+            success: function (response) {
+
+                console.log("resp: " + response);
+                alert("Deleted");
+                window.location.reload();
+                //alert(location.href);
+                //swal("Good job!", "You clicked the button!", "success");
+                //window.location.href =  window.location.href;
+                //
+            }
+        });
+    }
+
+
 });
 $(function () {
 
@@ -31,6 +78,8 @@ $(function () {
         var r = $('<a class="btn btn-default" >' + value + '</a>');
         $(".result").append(r);
     });
+
+
 });
 
 function sortAlphabetically(parent, childSelector, keySelector, sortDescending) {

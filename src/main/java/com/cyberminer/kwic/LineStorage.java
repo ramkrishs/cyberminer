@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class LineStorage {
 
-    private ArrayList<String> lines = new ArrayList<String>();
+    private ArrayList<String> lines = new ArrayList<>();
 
     public ArrayList<String> getLines() {
         return lines;

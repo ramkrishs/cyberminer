@@ -1,9 +1,3 @@
-<%-- 
-    Document   : config
-    Created on : Nov 8, 2015, 3:08:15 AM
-    Author     : Ram
---%>
-
 <%@page import="com.cyberminer.searchengine.UserFilter"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
@@ -83,7 +77,7 @@
                             <h3>Filter List</h3>
                             <%
                                 List<UserFilter> searchResponses = (ArrayList) request.getAttribute("filterValueResult");
-                            
+
                                 for (UserFilter data : searchResponses) {
 
                                     if (data != null) {

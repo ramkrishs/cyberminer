@@ -18,12 +18,12 @@ public class NoiseEliminator {
 
     // This list can grow at later stage
     private ArrayList<String> noiseList = new ArrayList<>(Arrays.asList("a", "an", "is", "of", "the"));
-    
+
     ArrayList<String> noiseFilteredlines;
 
     public ArrayList<String> elimateNoiseLine(ArrayList<String> lines) {
         noiseFilteredlines = new ArrayList<>(lines);
-        try{
+        try {
             for (String line : lines) {
                 if (line.indexOf(' ') > -1) {
                     if (noiseList.contains(line.substring(0, line.indexOf(' ')))) {
@@ -31,11 +31,10 @@ public class NoiseEliminator {
                     }
                 }
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.err.println("Exception in elimateNoiseLine " + e.getMessage());
         }
-        
+
         return noiseFilteredlines;
     }
 }

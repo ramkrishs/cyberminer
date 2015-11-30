@@ -20,14 +20,12 @@ public class Alphabetizer {
      */
     public void doAlphabetize(ArrayList<String> NoiseEliminatedlines) {
         alphabetizedOutput = new ArrayList<>(NoiseEliminatedlines);
-        try{
-             Collections.sort(alphabetizedOutput, String.CASE_INSENSITIVE_ORDER);
-        }
-        catch(Exception e){
-            
+        try {
+            Collections.sort(alphabetizedOutput, String.CASE_INSENSITIVE_ORDER);
+        } catch (Exception e) {
+
             System.err.println("Exception in doAlphabetize " + e.getMessage());
         }
-       
 
     }
 

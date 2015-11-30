@@ -1,11 +1,9 @@
-
 package com.cyberminer.DBClient;
 
 import com.cyberminer.searchengine.Searchengine;
 import com.cyberminer.searchengine.UserFilter;
 import java.util.List;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-
 
 public interface DBClient {
 

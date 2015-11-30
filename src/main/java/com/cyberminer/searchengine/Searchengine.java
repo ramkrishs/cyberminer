@@ -1,6 +1,5 @@
 package com.cyberminer.searchengine;
 
-
 public class Searchengine {
 
     private String id;
