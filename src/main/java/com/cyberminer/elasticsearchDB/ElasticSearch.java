@@ -12,25 +12,18 @@ import com.cyberminer.kwic.CircularShift;
 import com.cyberminer.kwic.NoiseEliminator;
 import com.cyberminer.searchengine.Searchengine;
 import com.cyberminer.searchengine.UserFilter;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.elasticsearch.action.delete.DeleteResponse;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
-import org.elasticsearch.search.SearchHit;
-import org.json.JSONObject;
 
 /**
  *
@@ -133,8 +126,13 @@ public class ElasticSearch extends HttpServlet {
                     }
                     searchResponse = escon.andSearch(newString);
                 } else {
-
-                    searchResponse = escon.orSearch(searchString);
+                    String[] newString = searchString.split(Pattern.quote(" "));
+                    String searchstring;
+                    for (int i = 0; i < newString.length; i++) {
+                        searchstring = newString[i].trim() ;
+                    }
+                    searchstring = String.join(" ", newString);
+                    searchResponse = escon.orSearch(searchstring);
 
                 }
 
@@ -167,14 +165,10 @@ public class ElasticSearch extends HttpServlet {
             uniqueTokens = escon.getKeywords();
             System.out.println("in servelter");
             System.out.println(uniqueTokens);
-            String [] newlist = uniqueTokens.toArray(new String[uniqueTokens.size()]);
-            String ss = request.getParameter("tokenvalues");
-            System.out.println(ss);
-            request.setAttribute("ss", ss);
             response.setContentType("application/json");
-           
-            PrintWriter out = response.getWriter();
-            out.write(Arrays.toString(newlist));
+            String keyWords = new Gson().toJson(uniqueTokens);
+            response.getWriter().write(keyWords);
+            
            
 
            

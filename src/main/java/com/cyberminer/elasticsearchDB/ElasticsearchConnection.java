@@ -18,8 +18,14 @@ public class ElasticsearchConnection {
             .put("cluster.name", ES_CLUSTER_NAME).build();
 
     public ElasticsearchConnection() {
-        client = new TransportClient(settings)
+        try{
+            client = new TransportClient(settings)
                 .addTransportAddress(new InetSocketTransportAddress(ES_HOST, 9300));
+        }
+        catch(Exception e){
+            System.err.println("Exception in ElasticsearchConnection " + e.getMessage());
+        }
+        
     }
 
     public void closeClient() {

@@ -124,31 +124,31 @@
 
         </script>
         <script>
-            $(function () {
-                var availableTags = [
-                    "ActionScript",
-                    "AppleScript",
-                    "Asp",
-                    "BASIC",
-                    "C",
-                    "C++",
-                    "Clojure",
-                    "COBOL",
-                    "ColdFusion",
-                    "Erlang",
-                    "Fortran",
-                    "Groovy",
-                    "Haskell",
-                    "Java",
-                    "JavaScript",
-                    "Lisp",
-                    "Perl",
-                    "PHP",
-                    "Python",
-                    "Ruby",
-                    "Scala",
-                    "Scheme"
-                ];
+            
+        </script>
+        <script src="js/main.js"></script>
+        <script>
+           var value = "1";
+           $.ajax({
+               url: '/cyberminer/result',
+               data: {
+                   "tokenvalues": value
+               },
+               type: 'post',
+               dataType:"json",
+               success: function (res) {
+                   
+                   console.log(typeof (res));
+                   autofil(res);
+                   
+                   
+                   
+               }
+
+           });
+           function autofil (val) {
+                var availableTags = val;
+                
                 function split(val) {
                     return val.split(/ \s*/);
                 }
@@ -187,25 +187,7 @@
                                 return false;
                             }
                         });
-            });
-        </script>
-        <script src="js/main.js"></script>
-        <script>
-           var value = "1";
-           $.ajax({
-               url: '/cyberminer/result',
-               data: {
-                   "tokenvalues": value
-               },
-               type: 'post',
-               success: function (res) {
-
-                   console.log(typeof (res));
-
-
-               }
-
-           });
+            };
         </script>
     </body>
 </html>

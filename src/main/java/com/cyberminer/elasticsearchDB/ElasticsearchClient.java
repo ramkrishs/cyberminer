@@ -8,15 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
-import javax.servlet.RequestDispatcher;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
@@ -33,58 +30,75 @@ public class ElasticsearchClient implements DBClient {
     }
 
     private SearchResponse runESQuery(String type, QueryBuilder qb) {
-        SearchResponse response = esCon.client.prepareSearch(Constants.URL_TABLE_NAME)
+        SearchResponse response = new SearchResponse();
+        try{
+            response = esCon.client.prepareSearch(Constants.URL_TABLE_NAME)
                 .setTypes(type)
                 .setQuery(qb)
                 .execute()
                 .actionGet();
+            
+        }
+        catch(Exception e){
+            System.err.println("Exception in RunESQuery" + e.getMessage());
+        }
         return response;
     }
 
     private List<Searchengine> getSearchengineDBEntires(SearchResponse response) {
-
         List<Searchengine> searchResponses = new ArrayList();
-        if (response != null) {
+        try{
+            if (response != null) {
 
             SearchHit[] results = response.getHits().getHits();
             int totalHits = (int) response.getHits().totalHits();
-            for (SearchHit hit : results) {
-                Searchengine searchengineObj = new Searchengine();
-                String id = hit.getId();
-                String url = hit.getSource().get("url").toString();
-                ArrayList descrip;
-                descrip = (ArrayList) hit.getSource().get("description");
-                String description = (String) descrip.get(descrip.size() - 1);
-                int hitRate = (int) hit.getSource().get("hitrate");
-                searchengineObj.setId(id);
-                searchengineObj.setUrl(url);
-                searchengineObj.setDescription(description);
-                searchengineObj.setHitrate(hitRate);
-                searchengineObj.setTotalhits(totalHits);
-                searchResponses.add(searchengineObj);
+                for (SearchHit hit : results) {
+                    Searchengine searchengineObj = new Searchengine();
+                    String id = hit.getId();
+                    String url = hit.getSource().get("url").toString();
+                    ArrayList descrip;
+                    descrip = (ArrayList) hit.getSource().get("description");
+                    String description = (String) descrip.get(descrip.size() - 1);
+                    int hitRate = (int) hit.getSource().get("hitrate");
+                    searchengineObj.setId(id);
+                    searchengineObj.setUrl(url);
+                    searchengineObj.setDescription(description);
+                    searchengineObj.setHitrate(hitRate);
+                    searchengineObj.setTotalhits(totalHits);
+                    searchResponses.add(searchengineObj);
+                }
+
             }
-
         }
-
+        catch(Exception e){
+            System.err.println("Exception in getSearchengineDBEntires " + e.getMessage());
+        }
+        
         return searchResponses;
     }
 
     @Override
     public boolean insert(String type, XContentBuilder document) {
-
-        IndexResponse response = esCon.client.prepareIndex(Constants.URL_TABLE_NAME, type)
+        IndexResponse response = new IndexResponse();
+        try{
+            response = esCon.client.prepareIndex(Constants.URL_TABLE_NAME, type)
                 .setSource(document)
                 .execute()
                 .actionGet();
+        }
+        catch(Exception e){
+            System.err.println("Exception in insert " + e.getMessage());
+        }
+        
         return response.isCreated();
     }
 
     @Override
     public List<UserFilter> userFilterresponse() {
         List<UserFilter> searchResponses = new ArrayList();
-
-        SearchResponse response = this.runESQuery(Constants.FILTER_TYPE, QueryBuilders.matchAllQuery());
-        if (response != null) {
+        try{
+            SearchResponse response = this.runESQuery(Constants.FILTER_TYPE, QueryBuilders.matchAllQuery());
+            if (response != null) {
 
             SearchHit[] results = response.getHits().getHits();
             for (SearchHit hit : results) {
@@ -95,53 +109,69 @@ public class ElasticsearchClient implements DBClient {
                 userFilterObj.setFilterID(filterID);
                 //System.out.println(data);
                 searchResponses.add(userFilterObj);
+                }
             }
         }
+        catch(Exception e){
+            System.err.println("Exception in userFilterresponse " + e.getMessage());
+        }
+        
         return searchResponses;
     }
 
     public BoolQueryBuilder getFilterquery() {
-        List<UserFilter> userFilters = this.userFilterresponse();
         BoolQueryBuilder filterQuery = QueryBuilders.boolQuery();
-
-        for (UserFilter userFilter : userFilters) {
-            filterQuery.mustNot(QueryBuilders.matchQuery("description", userFilter.getUserFilter()));
+        try{
+            List<UserFilter> userFilters = this.userFilterresponse();
+            for (UserFilter userFilter : userFilters) {
+                filterQuery.mustNot(QueryBuilders.matchQuery("description", userFilter.getUserFilter()));
+            }
         }
+        catch(Exception e){
+            System.err.println("Exception in getFilterquery " + e.getMessage());
+        }
+        
         return filterQuery;
     }
 
     @Override
     public List<Searchengine> orSearch(String document) {
-
-        BoolQueryBuilder filterQuery = this.getFilterquery();
         List<Searchengine> searchResponses = new ArrayList();
+        try{
+            BoolQueryBuilder filterQuery = this.getFilterquery();
+            FilteredQueryBuilder fbuilder = QueryBuilders.filteredQuery(QueryBuilders.matchQuery("description", document),
+            FilterBuilders.queryFilter(filterQuery));
+            SearchResponse response = this.runESQuery(Constants.ES_TYPE, fbuilder);
 
-        FilteredQueryBuilder fbuilder = QueryBuilders.filteredQuery(QueryBuilders.matchQuery("description", document),
-                FilterBuilders.queryFilter(filterQuery));
-        SearchResponse response = this.runESQuery(Constants.ES_TYPE, fbuilder);
+            if (response != null) {
 
-        if (response != null) {
-
-            searchResponses = this.getSearchengineDBEntires(response);
-
+                searchResponses = this.getSearchengineDBEntires(response);
+            }
         }
-
+        catch(Exception e){
+            System.err.println("Exception in orSearch " + e.getMessage());
+        }
         return searchResponses;
     }
 
     @Override
     public List<Searchengine> notSearch(String document) {
-        BoolQueryBuilder filterQuery = this.getFilterquery();
         List<Searchengine> searchResponses = new ArrayList();
-        QueryBuilder qb = QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery("description", document));
-        FilteredQueryBuilder fbuilder = QueryBuilders.filteredQuery(qb,
-                FilterBuilders.queryFilter(filterQuery));
-        SearchResponse response = this.runESQuery(Constants.ES_TYPE, fbuilder);
+        try{
+            BoolQueryBuilder filterQuery = this.getFilterquery();
+            QueryBuilder qb = QueryBuilders.boolQuery().mustNot(QueryBuilders.termQuery("description", document));
+            FilteredQueryBuilder fbuilder = QueryBuilders.filteredQuery(qb,
+                    FilterBuilders.queryFilter(filterQuery));
+            SearchResponse response = this.runESQuery(Constants.ES_TYPE, fbuilder);
 
-        if (response != null) {
+            if (response != null) {
 
-            searchResponses = this.getSearchengineDBEntires(response);
+                searchResponses = this.getSearchengineDBEntires(response);
 
+            }
+        }
+        catch(Exception e){
+            System.err.println("Exception in notSearch " + e.getMessage());
         }
 
         return searchResponses;
@@ -149,76 +179,91 @@ public class ElasticsearchClient implements DBClient {
 
     @Override
     public List<Searchengine> andSearch(String[] documents) {
-        BoolQueryBuilder qb = QueryBuilders.boolQuery();
         List<Searchengine> searchResponses = new ArrayList();
-        BoolQueryBuilder filterQuery = this.getFilterquery();
-        for (String document : documents) {
-            qb.must(QueryBuilders.matchQuery("description", document));
+        try{
+            BoolQueryBuilder qb = QueryBuilders.boolQuery();
+            BoolQueryBuilder filterQuery = this.getFilterquery();
+            for (String document : documents) {
+                qb.must(QueryBuilders.matchQuery("description", document));
+            }
+            FilteredQueryBuilder fbuilder = QueryBuilders.filteredQuery(qb,
+                    FilterBuilders.queryFilter(filterQuery));
+
+            SearchResponse response = this.runESQuery(Constants.ES_TYPE, fbuilder);
+
+            if (response != null) {
+
+                searchResponses = this.getSearchengineDBEntires(response);
+
+            }
         }
-        FilteredQueryBuilder fbuilder = QueryBuilders.filteredQuery(qb,
-                FilterBuilders.queryFilter(filterQuery));
-
-        SearchResponse response = this.runESQuery(Constants.ES_TYPE, fbuilder);
-
-        if (response != null) {
-
-            searchResponses = this.getSearchengineDBEntires(response);
-
+        catch(Exception e){
+            System.err.println("Exception in andSearch " + e.getMessage());
         }
-
         return searchResponses;
     }
 
     @Override
     public List<Searchengine> getAllrecord(String type) {
-
         List<Searchengine> searchResponses = new ArrayList();
+        try{
+            SearchResponse response = this.runESQuery(type, QueryBuilders.matchAllQuery());
+            if (response != null) {
 
-        SearchResponse response = this.runESQuery(type, QueryBuilders.matchAllQuery());
-        if (response != null) {
+                searchResponses = this.getSearchengineDBEntires(response);
 
-            searchResponses = this.getSearchengineDBEntires(response);
-
+            }
+        }
+        catch(Exception e){
+            System.err.println("Exception in getAllrecord " + e.getMessage());
         }
 
         return searchResponses;
     }
+    
     public List<String> getKeywords(){
+        List<String> uniqueTokens = new ArrayList<>();
         List<String> keywordString = new ArrayList<>();
         List<String> keywords = new ArrayList<>();
-        List<String> uniqueTokens = new ArrayList<>();
         List<Searchengine> searchResponses = new ArrayList();
+        try{
+            SearchResponse response = this.runESQuery(Constants.ES_TYPE, QueryBuilders.matchAllQuery());
+            if (response != null) {
 
-        SearchResponse response = this.runESQuery(Constants.ES_TYPE, QueryBuilders.matchAllQuery());
-        if (response != null) {
+                searchResponses = this.getSearchengineDBEntires(response);
 
-            searchResponses = this.getSearchengineDBEntires(response);
+                for (Searchengine data : searchResponses){
+
+                    keywordString.add(data.getDescription());
+
+                }
+                for(String key : keywordString){
+                    List<String> stringList = new ArrayList<>(Arrays.asList(key.split(Pattern.quote(" "))));
+                    keywords.addAll(stringList);
+                }
+
+             }
+                Set<String> uniqueWords = new HashSet<>(keywords);
+                uniqueTokens = new ArrayList<>(uniqueWords);
+        }
+        catch(Exception e){
+            System.err.println("Exception in getKeywords " + e.getMessage());
+        }
             
-            for (Searchengine data : searchResponses){
-                
-                keywordString.add(data.getDescription());
-                
-            }
-            
-            for(String key : keywordString){
-                List<String> stringList = new ArrayList<String>(Arrays.asList(key.split(Pattern.quote(" "))));
-                keywords.addAll(stringList);
-            }
-            System.out.println("Keywords are ");
-            System.out.println(keywords);
-         }
-            Set<String> uniqueWords = new HashSet<String>(keywords);
-            System.out.println("Unique Keywords are ");
-            System.out.println(uniqueWords);
-            List<String> list = new ArrayList<String>(uniqueWords);
-        return list;
+        return uniqueTokens;
         
     }
     @Override
     public boolean delete(String documentID) {
-        DeleteResponse response = esCon.client.prepareDelete(Constants.URL_TABLE_NAME,
+        DeleteResponse response = new DeleteResponse();
+        try{
+            response = esCon.client.prepareDelete(Constants.URL_TABLE_NAME,
                 Constants.ES_TYPE, documentID).get();
-
+        }
+        catch(Exception e){
+            System.err.println("Exception in delete " + e.getMessage());
+        }
+        
         return response.isFound();
     }
 
