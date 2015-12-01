@@ -54,7 +54,7 @@
                         <h1 class="text-center">Search</h1>
                         <form action="result" method="post">
                             <div class="input-group col-md-12 col-sm-12 col-xs-12 search-bar  ">
-                                <input type="text" class="form-control input-lg" placeholder="Enter a String to Search in KWIC Index" name="searchString" id="SearchString"/>
+                                <input type="text" class="form-control input-lg" placeholder="Enter a String to Search in KWIC Index" name="searchString" id="SearchString" required/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-info btn-lg" type="submit" data-toggle="tooltip" name="search" data-placement="top" title="Click here to Search" id="gen_btn">
                                         <i class="glyphicon glyphicon-search"></i> Search
@@ -71,6 +71,7 @@
                         <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
+                        <div >Search input: <c:out value="${param['searchString']}"></c:out></div>
                         <div class="search-count">search result: <span class="total-count">
                                 <%
                                     if (searchResponses.size() > 0) {
@@ -180,8 +181,7 @@
                                 return false;
                             }
                         });
-            }
-            ;
+            };
         </script>
     </body>
 </html>
