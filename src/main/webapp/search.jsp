@@ -62,33 +62,49 @@
                                 </span>
                             </div>
                         </form>
+
+
+                        <% if (request.getAttribute("searchResponse") != null) {%>
+                        <%
+                            List<Searchengine> searchResponses = (ArrayList) request.getAttribute("searchResponse");
+                        %>
+                        <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
+                        <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
+                        <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
+                        <div class="search-count">search result: <span class="total-count">
+                                <%
+                                    if (searchResponses.size() > 0) {
+                                        Searchengine totalhit = searchResponses.get(0);
+
+                                        out.println(totalhit.getTotalhits());
+                                    } else {
+                                        out.println(0);
+                                    }
+
+                                %></span>
+                        </div>
+
+                        <hr>
+                        <h3 class="search-count">Search Result</h3>
+                        <div class="search-result">
+                            <ul id="list">
+                                <c:forEach items="${searchResponse}" var="data">
+                                    <li>
+                                        <a href="<c:out value='${data.getUrl()}'></c:out>" target="_blank"><c:out value='${data.getUrl()}'></c:out></a>
+                                        <p id="de"><c:out value='${data.getDescription()}'></c:out></p>
+                                        <div id="hitrate" style="display: none;"><c:out value='${data.getHitrate()}'></c:out></div>
+                                        </li>
+                                </c:forEach>
+
+
+                            </ul>
+                        </div>
                         <c:if test="${not empty searchResponse}" >
-                            <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
-                            <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
-                            <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
-                            <div class="search-count">search result: <span class="total-count">
-                                    <c:if test="${!empty(searchResponse) }">
-                                        <c:set var="totalHit" value="${searchResponse.get(0)}"></c:set>
-                                        <c:out value="${totalHit.getTotalhits()}"></c:out>
-                                    </c:if> 
-                                </span>
-                            </div>
-                            <hr>
-                            <h3 class="search-count">Search Result</h3>
-                            <div class="search-result">
-                                <ul id="list">
-                                    <c:forEach items="${searchResponse}" var="data">
-                                        <li>
-                                            <a href="<c:out value='${data.getUrl()}'></c:out>" target="_blank"><c:out value='${data.getUrl()}'></c:out></a>
-                                            <p id="de"><c:out value='${data.getDescription()}'></c:out></p>
-                                            <div id="hitrate" style="display: none;"><c:out value='${data.getHitrate()}'></c:out></div>
-                                            </li>
-                                    </c:forEach>
-                                </ul>
-                            </div>
-                            <div id="black"  style="margin-left: 40%;">
-                            </div>
+                        <div id="black"  style="margin-left: 40%;">
+                        </div>
                         </c:if>
+                        <%                                }
+                        %>
                     </div>
                     <!--/col-span-9-->
                 </div>

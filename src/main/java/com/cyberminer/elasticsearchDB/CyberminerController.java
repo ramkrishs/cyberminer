@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.cyberminer.searchengine;
+package com.cyberminer.elasticsearchDB;
 
 import com.cyberminer.commons.Constants;
 import com.cyberminer.elasticsearchDB.ElasticsearchClient;
 import com.cyberminer.kwic.Alphabetizer;
 import com.cyberminer.kwic.CircularShift;
 import com.cyberminer.kwic.NoiseEliminator;
+import com.cyberminer.searchengine.Searchengine;
+import com.cyberminer.searchengine.UserFilter;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
