@@ -9,6 +9,7 @@ import com.cyberminer.commons.Constants;
 import com.cyberminer.elasticsearchDB.ElasticsearchClient;
 import com.cyberminer.kwic.Alphabetizer;
 import com.cyberminer.kwic.CircularShift;
+import com.cyberminer.kwic.Kwic;
 import com.cyberminer.kwic.NoiseEliminator;
 import com.cyberminer.searchengine.Searchengine;
 import com.cyberminer.searchengine.UserFilter;
@@ -51,21 +52,13 @@ public class CyberminerController extends HttpServlet {
         if (request.getParameter("insert") != null) {
 
             if (!stringName.isEmpty() && !urlvalue.isEmpty()) {
-
-                CircularShift csObject = new CircularShift();
-                Alphabetizer alphabetizerObject = new Alphabetizer();
-                NoiseEliminator noiseElimatorObject = new NoiseEliminator();
-                csObject.doCircularShift(stringName);
-                ArrayList<String> csArrayOutput = csObject.getCsOutput();
-                ArrayList<String> noiseElimatedOutput = noiseElimatorObject.elimateNoiseLine(csArrayOutput);
-                alphabetizerObject.doAlphabetize(noiseElimatedOutput);
-                ArrayList<String> alphalist = alphabetizerObject.getAlphabetizedOutput();
-                alphalist.add(stringName);
+                Kwic kwicObj = new Kwic();
+                ArrayList<String>  kwicOutput = kwicObj.getKwicOutput(stringName);
                 XContentBuilder builder;
                 builder = jsonBuilder()
                         .startObject()
                         .field("url", urlvalue)
-                        .field("description", alphalist)
+                        .field("description", kwicOutput)
                         .field("hitrate", 0)
                         .endObject();
 
