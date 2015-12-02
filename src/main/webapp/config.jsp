@@ -44,7 +44,7 @@
                         <form method="post" action="result">
                             <div class="input-group col-md-12 col-sm-12 col-xs-12 user-config ">
 
-                                <input type="text" class="form-control input-lg" name="userConfigInput" placeholder="Enter a word / symbol to filter out" id="user_filters" required/>
+                                <input type="text" class="form-control input-lg" name="userConfigInput" placeholder="Enter a word / symbol to filter out" id="user_filters" />
                                 <span class="input-group-btn">
                                     <button name="addConfigbtn" class="btn btn-info btn-lg" type="submit" data-toggle="tooltip" data-placement="top" title="Click here to Add filter" id="gena_btn">
                                         <i class="glyphicon glyphicon-save"></i> Add

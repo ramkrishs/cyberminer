@@ -1,9 +1,3 @@
-<%-- 
-    Document   : search
-    Created on : Nov 8, 2015, 3:08:39 AM
-    Author     : Ram
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="com.cyberminer.searchengine.Searchengine"%>
 <%@page import="java.util.List"%>
@@ -54,7 +48,7 @@
                         <h1 class="text-center">Search</h1>
                         <form action="result" method="post">
                             <div class="input-group col-md-12 col-sm-12 col-xs-12 search-bar  ">
-                                <input type="text" class="form-control input-lg" placeholder="Enter a String to Search in KWIC Index" name="searchString" id="SearchString" required/>
+                                <input type="text" class="form-control input-lg" placeholder="Enter a String to Search in KWIC Index" name="searchString" id="SearchString"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-info btn-lg" type="submit" data-toggle="tooltip" name="search" data-placement="top" title="Click here to Search" id="gen_btn">
                                         <i class="glyphicon glyphicon-search"></i> Search
@@ -71,7 +65,7 @@
                         <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
-                        <div >Search input: <c:out value="${param['searchString']}"></c:out></div>
+                        <div>search input: <c:out value="${param['searchString']}"></c:out></div>   
                         <div class="search-count">search result: <span class="total-count">
                                 <%
                                     if (searchResponses.size() > 0) {
@@ -119,15 +113,31 @@
         <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script src="js/smartpaginator.js" type="text/javascript"></script>
         <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
         <script>
             var totalCount = Number($('.total-count').text().trim());
             console.log(totalCount);
-            $('#black').smartpaginator({totalrecords: totalCount, recordsperpage: 5, datacontainer: 'list', dataelement: 'li', initval: 0, next: 'Next', prev: 'Prev', first: 'First', last: 'Last', theme: 'black'});
+            $('#black').smartpaginator({totalrecords: totalCount, recordsperpage: 10, datacontainer: 'list', dataelement: 'li', initval: 0, next: 'Next', prev: 'Prev', first: 'First', last: 'Last', theme: 'black'});
         </script>
         <script>
+            
+                var desc = false;
+    document.getElementById("azSort").onclick = function () {
+        
+        sortAlphabetically($('#list'), "li", "p", desc);
+        desc = !desc;
+        return false;
+    };
+    document.getElementById("numSort").onclick = function () {
+        sortHitrate($('#list'), "li", "div", desc);
+        desc = !desc;
+        return false;
+    };
+            
+            
 
         </script>
-        <script src="js/main.js"></script>
+        
         <script>
             var value = "1";
             $.ajax({
@@ -181,7 +191,8 @@
                                 return false;
                             }
                         });
-            };
+            }
+            ;
         </script>
     </body>
 </html>

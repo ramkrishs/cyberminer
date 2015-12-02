@@ -155,7 +155,7 @@ public class CyberminerController extends HttpServlet {
 
             }
         }
-
+        if (request.getParameter("tokenvalues") != null) {
         if ((request.getParameter("tokenvalues")).equals("1")) {
             System.out.println("ajax worked ");
             List<String> uniqueTokens = new ArrayList<>();
@@ -166,6 +166,7 @@ public class CyberminerController extends HttpServlet {
             String keyWords = new Gson().toJson(uniqueTokens);
             response.getWriter().write(keyWords);
 
+        }
         }
 
     }
