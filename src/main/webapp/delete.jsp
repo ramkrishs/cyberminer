@@ -4,6 +4,7 @@
     Author     : Ram
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="com.cyberminer.searchengine.Searchengine"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
@@ -59,27 +60,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <% if (request.getAttribute("searchResponse") != null) {%>
-                                <%
-                                    List<Searchengine> searchResponses = (ArrayList) request.getAttribute("searchResponse");
-                                %>
-                                <%
-                                    for (Searchengine data : searchResponses) {
-
-                                        if (data != null) {
-                                %>
-                                <tr>
-                                    <td><% out.println(data.getUrl()); %></td>
-                                    <td><%
-                                        out.println(data.getDescription()); %></td>
-                                    <td><button docid ="<% out.println(data.getId()); %>" class="btn btn-warning">Delete</button></td> 
-                                </tr>
-                                <%
-                                            }
-                                        }
-                                    }
-                                %>
+                                <c:if test="${not empty searchResponse}">
+                                <c:forEach items="${searchResponse}" var="data" >
+                                    <tr>
+                                        <td><c:out value="${data.getUrl()}"></c:out> </td>
+                                        <td><c:out value="${data.getDescription()}"></c:out> </td>
+                                        <td><button docid ="<c:out value='${data.getId()}'></c:out>" class="btn btn-warning">Delete</button></td>
+                                    </tr>
+                                </c:forEach>
+                            </c:if>
+                               
                             </tbody>
                         </table>
                     </div>

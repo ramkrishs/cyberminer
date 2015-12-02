@@ -156,17 +156,31 @@ public class CyberminerController extends HttpServlet {
             }
         }
         if (request.getParameter("tokenvalues") != null) {
-        if ((request.getParameter("tokenvalues")).equals("1")) {
-            System.out.println("ajax worked ");
-            List<String> uniqueTokens = new ArrayList<>();
-            uniqueTokens = escon.getKeywords();
-            System.out.println("in servelter");
-            System.out.println(uniqueTokens);
-            response.setContentType("application/json");
-            String keyWords = new Gson().toJson(uniqueTokens);
-            response.getWriter().write(keyWords);
+            if ((request.getParameter("tokenvalues")).equals("1")) {
+                System.out.println("ajax worked ");
+                List<String> uniqueTokens = new ArrayList<>();
+                uniqueTokens = escon.getKeywords();
+                System.out.println("in servelter");
+                System.out.println(uniqueTokens);
+                response.setContentType("application/json");
+                String keyWords = new Gson().toJson(uniqueTokens);
+                response.getWriter().write(keyWords);
 
-        }
+            }
+            else if ((request.getParameter("tokenvalues")).equals("2")) {
+                System.out.println("ajax worked ");
+                //List<String> uniqueTokens = new ArrayList<>();
+                //uniqueTokens = escon.getKeywords();
+                //System.out.println("in update servelter");
+                String docId = request.getParameter("docID");
+                int hit = Integer.parseInt(request.getParameter("hitrate"));
+                boolean res = escon.updateHitrate(docId, hit+1);
+                System.out.println(res);
+                response.setContentType("application/json");
+                String keyWords = new Gson().toJson("hellow");
+                response.getWriter().write(keyWords);
+
+            }
         }
 
     }

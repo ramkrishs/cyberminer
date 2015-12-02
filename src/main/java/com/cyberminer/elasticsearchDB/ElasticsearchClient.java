@@ -14,6 +14,9 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.FilteredQueryBuilder;
@@ -35,6 +38,7 @@ public class ElasticsearchClient implements DBClient {
             response = esCon.client.prepareSearch(Constants.URL_TABLE_NAME)
                     .setTypes(type)
                     .setQuery(qb)
+                    .setFrom(0).setSize(100)
                     .execute()
                     .actionGet();
 
@@ -65,6 +69,7 @@ public class ElasticsearchClient implements DBClient {
                     searchengineObj.setHitrate(hitRate);
                     searchengineObj.setTotalhits(totalHits);
                     searchResponses.add(searchengineObj);
+                    System.out.println(url);
                 }
 
             }
@@ -243,7 +248,30 @@ public class ElasticsearchClient implements DBClient {
         return uniqueTokens;
 
     }
-
+    
+    @Override
+    public boolean updateHitrate(String documentID,int hitrate){
+        UpdateResponse  response =  new UpdateResponse();
+        boolean responseFlag = false;
+        try{
+           
+            UpdateRequest updateRequest = new UpdateRequest();
+            updateRequest.index(Constants.URL_TABLE_NAME);
+            updateRequest.type(Constants.ES_TYPE);
+            updateRequest.id(documentID);
+            updateRequest.doc(jsonBuilder()
+                    .startObject()
+                        .field("hitrate", hitrate)
+                    .endObject());
+           response = esCon.client.update(updateRequest).get();
+            
+        }
+        catch(Exception e){
+            System.err.println("Exception in updateHitrate " + e.getMessage());
+        }
+        return responseFlag;
+    }
+    
     @Override
     public boolean delete(String documentID) {
         DeleteResponse response = new DeleteResponse();

@@ -12,13 +12,44 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <title>Cyberminer - Search</title>
+        <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-        <link href="css/smartpaginator.css" rel="stylesheet" type="text/css" />
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link href="css/main.css" rel="stylesheet">
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
+        <style type="text/css">
+        .holder {
+            margin: 15px 0;
+        }
+        .holder a {
+            font-size: 12px;
+            cursor: pointer;
+            margin: 0 5px;
+            color: #333;
+        }
+        .holder a:hover {
+            background-color: #222;
+            color: #fff;
+        }
+        .holder a.jp-previous { margin-right: 15px; }
+        .holder a.jp-next { margin-left: 15px; }
+        .holder a.jp-current, a.jp-current:hover {
+            color: #FF4242;
+            font-weight: bold;
+        }
+        .holder a.jp-disabled, a.jp-disabled:hover {
+            color: #bbb;
+        }
+        .holder a.jp-current, a.jp-current:hover,
+        .holder a.jp-disabled, a.jp-disabled:hover {
+            cursor: default;
+            background: none;
+        }
+        .holder span { margin: 0 5px; }
+        
+        </style>
     </head>
     <body>
         <!-- header -->
@@ -62,10 +93,12 @@
                         <%
                             List<Searchengine> searchResponses = (ArrayList) request.getAttribute("searchResponse");
                         %>
+                        
                         <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
-                        <div>search input: <c:out value="${param['searchString']}"></c:out></div>   
+                        <div>search input: <c:out value="${param['searchString']}"></c:out></div> 
+                        
                         <div class="search-count">search result: <span class="total-count">
                                 <%
                                     if (searchResponses.size() > 0) {
@@ -80,24 +113,29 @@
                         </div>
 
                         <hr>
+                        <form class="pull-right" style="margin-right: 10px;">
+                            <select>
+                                <option>5</option>
+                                <option>10</option>
+                                <option>15</option>
+                                <option>20</option>
+                            </select>
+                        </form>
                         <h3 class="search-count">Search Result</h3>
                         <div class="search-result">
                             <ul id="list">
                                 <c:forEach items="${searchResponse}" var="data">
                                     <li>
-                                        <a href="<c:out value='${data.getUrl()}'></c:out>" target="_blank"><c:out value='${data.getUrl()}'></c:out></a>
+                                        <a href="<c:out value='${data.getUrl()}'></c:out>" hitid ="<c:out value='${data.getHitrate()}'></c:out>"  docid ="<c:out value='${data.getId()}'></c:out>" target="_blank"><c:out value='${data.getUrl()}'></c:out></a>
                                         <p id="de"><c:out value='${data.getDescription()}'></c:out></p>
-                                        <div id="hitrate" style="display: none;"><c:out value='${data.getHitrate()}'></c:out></div>
-                                        </li>
+                                        <div id="hitrate" style="display: none;" ><c:out value='${data.getHitrate()}'></c:out></div>
+                                       
+                                    </li>
                                 </c:forEach>
-
-
                             </ul>
+                            <div class="holder" style="margin-left:35%;"></div>
                         </div>
-                        <c:if test="${not empty searchResponse}" >
-                        <div id="black"  style="margin-left: 40%;">
-                        </div>
-                        </c:if>
+                        
                         <%                                }
                         %>
                     </div>
@@ -111,13 +149,12 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
         <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        <script src="js/smartpaginator.js" type="text/javascript"></script>
+       
         <script src="js/vendor/bootstrap.min.js"></script>
-        <script src="js/main.js"></script>
+        
         <script>
             var totalCount = Number($('.total-count').text().trim());
             console.log(totalCount);
-            $('#black').smartpaginator({totalrecords: totalCount, recordsperpage: 10, datacontainer: 'list', dataelement: 'li', initval: 0, next: 'Next', prev: 'Prev', first: 'First', last: 'Last', theme: 'black'});
         </script>
         <script>
             
@@ -152,6 +189,28 @@
                     autofil(res);
                 }
             });
+            $("li a").click(function(){
+                
+                var value = "2";
+                var docID = $(this).attr('docid').trim();
+                var hitrate = $(this).attr('hitid').trim();
+                console.log(docID);
+                $.ajax({
+                    url: '/cyberminer/result',
+                    data: {
+                        "tokenvalues": value,
+                        "docID": docID,
+                        "hitrate" :hitrate
+                    },
+                    type: 'post',
+                    dataType: "json",
+                    success: function (res) {
+                        console.log( (res));
+
+                    }
+                });
+            });
+            
             function autofil(val) {
                 var availableTags = val;
                 function split(val) {
@@ -194,6 +253,29 @@
             }
             ;
         </script>
+       
+        <script src="js/jPages.js"></script>
+        <script type="text/javascript">
+        
+        $(function() {
+            $("div.holder").jPages({
+            containerID : "list",
+            perPage : 5
+            });
+            /* on select change */
+            $("select").change(function(){
+            /* get new nº of items per page */
+            var newPerPage = parseInt( $(this).val() );
+            /* destroy jPages and initiate plugin again */
+            $("div.holder").jPages("destroy").jPages({
+                containerID   : "list",
+                    perPage       : newPerPage
+            });
+            });
+        });
+        
+        </script>
+        <script src="js/main.js"></script>
     </body>
 </html>
 
