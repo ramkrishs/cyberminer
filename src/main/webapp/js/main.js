@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-    
+
     $('.btn-link').popover();
 
     $('.btn-link').on('click', function (e) {

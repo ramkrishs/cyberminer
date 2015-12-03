@@ -18,29 +18,29 @@
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
         <style>
-                input[type] {
-			/*margin-top: 24px;*/
-			transition: 0.5s;
-                }
-                input[type]:focus + label {
-			margin-top: -55px;
-			transition: 0.5s;
-		}
-		input[type]:focus:valid + label {
-			color: rgba(0,150,255, 1);
-		}
-		input[type]:focus:invalid + label, input[type]:invalid {
-			color: rgba(255,69,0, 1);
-		}
-		input[type]:focus:valid + label:after {
-			content: "✓";
-			margin-left: 0.5em;
-		}
-		input[type]:valid + label {
-			margin-top: -55px;
-			color: rgba(200,200,200, 1);
-		}
-        
+            input[type] {
+                /*margin-top: 24px;*/
+                transition: 0.5s;
+            }
+            input[type]:focus + label {
+                margin-top: -55px;
+                transition: 0.5s;
+            }
+            input[type]:focus:valid + label {
+                color: rgba(0,150,255, 1);
+            }
+            input[type]:focus:invalid + label, input[type]:invalid {
+                color: rgba(255,69,0, 1);
+            }
+            input[type]:focus:valid + label:after {
+                content: "✓";
+                margin-left: 0.5em;
+            }
+            input[type]:valid + label {
+                margin-top: -55px;
+                color: rgba(200,200,200, 1);
+            }
+
         </style>
     </head>
     <body>
@@ -123,18 +123,18 @@
         </script>
         <script src="js/main.js"></script>
         <script>
-            $( "#addurlForm" ).validate({
-                submitHandler: function(form) {
-                
-                form.submit();
-              },
+            $("#addurlForm").validate({
+                submitHandler: function (form) {
+
+                    form.submit();
+                },
                 rules: {
-                  urlString: {
-                    required: true,
-                    url: true
-                  }
+                    urlString: {
+                        required: true,
+                        url: true
+                    }
                 }
-              });
+            });
         </script>
     </body>
 </html>

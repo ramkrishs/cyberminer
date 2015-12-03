@@ -21,35 +21,35 @@
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
         <link rel="icon" href="favicon.ico" type="image/x-icon">
         <style type="text/css">
-        .holder {
-            margin: 15px 0;
-        }
-        .holder a {
-            font-size: 12px;
-            cursor: pointer;
-            margin: 0 5px;
-            color: #333;
-        }
-        .holder a:hover {
-            background-color: #222;
-            color: #fff;
-        }
-        .holder a.jp-previous { margin-right: 15px; }
-        .holder a.jp-next { margin-left: 15px; }
-        .holder a.jp-current, a.jp-current:hover {
-            color: #FF4242;
-            font-weight: bold;
-        }
-        .holder a.jp-disabled, a.jp-disabled:hover {
-            color: #bbb;
-        }
-        .holder a.jp-current, a.jp-current:hover,
-        .holder a.jp-disabled, a.jp-disabled:hover {
-            cursor: default;
-            background: none;
-        }
-        .holder span { margin: 0 5px; }
-        
+            .holder {
+                margin: 15px 0;
+            }
+            .holder a {
+                font-size: 12px;
+                cursor: pointer;
+                margin: 0 5px;
+                color: #333;
+            }
+            .holder a:hover {
+                background-color: #222;
+                color: #fff;
+            }
+            .holder a.jp-previous { margin-right: 15px; }
+            .holder a.jp-next { margin-left: 15px; }
+            .holder a.jp-current, a.jp-current:hover {
+                color: #FF4242;
+                font-weight: bold;
+            }
+            .holder a.jp-disabled, a.jp-disabled:hover {
+                color: #bbb;
+            }
+            .holder a.jp-current, a.jp-current:hover,
+            .holder a.jp-disabled, a.jp-disabled:hover {
+                cursor: default;
+                background: none;
+            }
+            .holder span { margin: 0 5px; }
+
         </style>
     </head>
     <body>
@@ -86,7 +86,7 @@
                                         <i class="glyphicon glyphicon-search"></i> Search
                                     </button>
                                 </span>
-                                  
+
                             </div>
                             <a id="hint-link" class="btn btn-link pull-right" style="margin-right:10px">Search hint</a> 
                         </form>
@@ -96,13 +96,13 @@
                         <%
                             List<Searchengine> searchResponses = (ArrayList) request.getAttribute("searchResponse");
                         %>
-                        
+
                         <div id="azSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort alphabetically " style="margin-right: 10px;"><i id="azSortIcon" class="fa fa-sort-alpha-asc" style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div id="numSort" class="pull-right btn-success" data-toggle="tooltip" data-placement="bottom" title="Click here to sort based on Hitrate " style="margin-right: 10px;"><i id="numSortIcon" class="fa fa-sort-numeric-asc " style="font-size: 22px; padding: 6px; border-bottom: solid 4px #DDDDDD;"></i></div>
                         <div class="search-count pull-right" style="margin-right: 10px; padding-top: 8px;">Sort the results based on: </div>
                         <div>search input: <c:out value="${param['searchString']}"></c:out></div> 
-                        
-                        <div class="search-count">search result: <span class="total-count">
+
+                            <div class="search-count">search result: <span class="total-count">
                                 <%
                                     if (searchResponses.size() > 0) {
                                         Searchengine totalhit = searchResponses.get(0);
@@ -132,13 +132,13 @@
                                         <a href="<c:out value='${data.getUrl()}'></c:out>" hitid ="<c:out value='${data.getHitrate()}'></c:out>"  docid ="<c:out value='${data.getId()}'></c:out>" target="_blank"><c:out value='${data.getUrl()}'></c:out></a>
                                         <p id="de"><c:out value='${data.getDescription()}'></c:out></p>
                                         <div id="hitrate" style="display: none;" ><c:out value='${data.getHitrate()}'></c:out></div>
-                                       
-                                    </li>
+
+                                        </li>
                                 </c:forEach>
                             </ul>
                             <div class="holder" style="margin-left:35%;"></div>
                         </div>
-                        
+
                         <%                                }
                         %>
                     </div>
@@ -154,30 +154,30 @@
         <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script src="js/vendor/sweetalert.min.js"></script>
         <script src="js/vendor/bootstrap.min.js"></script>
-        
+
         <script>
             var totalCount = Number($('.total-count').text().trim());
             console.log(totalCount);
         </script>
         <script>
-            
-                var desc = false;
-    document.getElementById("azSort").onclick = function () {
-        
-        sortAlphabetically($('#list'), "li", "p", desc);
-        desc = !desc;
-        return false;
-    };
-    document.getElementById("numSort").onclick = function () {
-        sortHitrate($('#list'), "li", "div", desc);
-        desc = !desc;
-        return false;
-    };
-            
-            
+
+            var desc = false;
+            document.getElementById("azSort").onclick = function () {
+
+                sortAlphabetically($('#list'), "li", "p", desc);
+                desc = !desc;
+                return false;
+            };
+            document.getElementById("numSort").onclick = function () {
+                sortHitrate($('#list'), "li", "div", desc);
+                desc = !desc;
+                return false;
+            };
+
+
 
         </script>
-        
+
         <script>
             var value = "1";
             $.ajax({
@@ -192,9 +192,9 @@
                     autofil(res);
                 }
             });
-             
-            $("li a").click(function(){
-                
+
+            $("li a").click(function () {
+
                 var value = "2";
                 var docID = $(this).attr('docid').trim();
                 var hitrate = $(this).attr('hitid').trim();
@@ -204,17 +204,17 @@
                     data: {
                         "tokenvalues": value,
                         "docID": docID,
-                        "hitrate" :hitrate
+                        "hitrate": hitrate
                     },
                     type: 'post',
                     dataType: "json",
                     success: function (res) {
-                        console.log( (res));
+                        console.log((res));
 
                     }
                 });
             });
-            
+
             function autofil(val) {
                 var availableTags = val;
                 function split(val) {
@@ -257,34 +257,34 @@
             }
             ;
         </script>
-       
+
         <script src="js/jPages.js"></script>
         <script type="text/javascript">
-        
-        $(function() {
-            $("div.holder").jPages({
-            containerID : "list",
-            perPage : 5
-            });
-            /* on select change */
-            $("select").change(function(){
-            /* get new nº of items per page */
-            var newPerPage = parseInt( $(this).val() );
-            /* destroy jPages and initiate plugin again */
-            $("div.holder").jPages("destroy").jPages({
-                containerID   : "list",
-                    perPage       : newPerPage
-            });
-            });
-            $('#hint-link').click(function(){
+
+            $(function () {
+                $("div.holder").jPages({
+                    containerID: "list",
+                    perPage: 5
+                });
+                /* on select change */
+                $("select").change(function () {
+                    /* get new nº of items per page */
+                    var newPerPage = parseInt($(this).val());
+                    /* destroy jPages and initiate plugin again */
+                    $("div.holder").jPages("destroy").jPages({
+                        containerID: "list",
+                        perPage: newPerPage
+                    });
+                });
+                $('#hint-link').click(function () {
 //                swal({   title: 'Search hint',   
 //                    html: '<span style="color:#333;"><b>OR Search: </b> Search input format: Keyword1 keyword2 keyword3 keyword4 <br/>, ' +     '<b>AND Search: </b> Search input format: “Keyword1 && keyword2 && keyword3 && keyword4 (it is ok have space between && symbol and keywords)” <br> ' +     '<b>NOT Search: </b> Search input format: !keyword</span>' 
 //                });
-swal({   title: '<span style="color:#333; font-size:20px;"><b>OR Search: </b> Search input format: Keyword1 keyword2<br/>' +     '<b>AND Search: </b> Search input format: “Keyword1 && keyword2” <br> ' +     '<b>NOT Search: </b> Search input format: !keyword</span>',   html: $("<div>").addClass('hintbox').text('jQuery is everywhere.') });
+                    swal({title: '<span style="color:#333; font-size:20px;"><b>OR Search: </b> Search input format: Keyword1 keyword2<br/>' + '<b>AND Search: </b> Search input format: “Keyword1 && keyword2” <br> ' + '<b>NOT Search: </b> Search input format: !keyword</span>', html: $("<div>").addClass('hintbox').text('jQuery is everywhere.')});
+                });
+
             });
-            
-        });
-        
+
         </script>
         <script src="js/main.js"></script>
     </body>

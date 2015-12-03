@@ -20,8 +20,8 @@ public interface DBClient {
     List<Searchengine> getAllrecord(String type);
 
     boolean delete(String documentID);
-    
-    boolean updateHitrate(String documentID,int hitrate);
+
+    boolean updateHitrate(String documentID, int hitrate);
 
     List<UserFilter> userFilterresponse();
 }

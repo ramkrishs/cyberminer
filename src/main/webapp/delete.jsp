@@ -61,15 +61,15 @@
                             </thead>
                             <tbody>
                                 <c:if test="${not empty searchResponse}">
-                                <c:forEach items="${searchResponse}" var="data" >
-                                    <tr>
-                                        <td><c:out value="${data.getUrl()}"></c:out> </td>
-                                        <td><c:out value="${data.getDescription()}"></c:out> </td>
-                                        <td><button docid ="<c:out value='${data.getId()}'></c:out>" class="btn btn-warning">Delete</button></td>
-                                    </tr>
-                                </c:forEach>
-                            </c:if>
-                               
+                                    <c:forEach items="${searchResponse}" var="data" >
+                                        <tr>
+                                            <td><c:out value="${data.getUrl()}"></c:out> </td>
+                                            <td><c:out value="${data.getDescription()}"></c:out> </td>
+                                            <td><button docid ="<c:out value='${data.getId()}'></c:out>" class="btn btn-warning">Delete</button></td>
+                                            </tr>
+                                    </c:forEach>
+                                </c:if>
+
                             </tbody>
                         </table>
                     </div>

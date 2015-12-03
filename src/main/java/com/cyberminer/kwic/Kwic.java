@@ -7,35 +7,32 @@ package com.cyberminer.kwic;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author John
- */
 public class Kwic {
+    private CircularShift csObject;
+    private Alphabetizer alphabetizerObject;
+    private  NoiseEliminator noiseElimatorObject;
     
-    CircularShift csObject = new CircularShift();
-    Alphabetizer alphabetizerObject = new Alphabetizer();
-    NoiseEliminator noiseElimatorObject = new NoiseEliminator();
+    public Kwic(){
+        csObject = new CircularShift();
+        alphabetizerObject = new Alphabetizer();
+        noiseElimatorObject = new NoiseEliminator();
+    }
     
-    
-    public ArrayList<String> getKwicOutput(String stringName){
+
+    public ArrayList<String> getKwicOutput(String stringName) {
         ArrayList<String> alphalist = new ArrayList<>();
-        try{
+        try {
             csObject.doCircularShift(stringName);
             ArrayList<String> csArrayOutput = csObject.getCsOutput();
             ArrayList<String> noiseElimatedOutput = noiseElimatorObject.elimateNoiseLine(csArrayOutput);
             alphabetizerObject.doAlphabetize(noiseElimatedOutput);
             alphalist = alphabetizerObject.getAlphabetizedOutput();
             alphalist.add(stringName);
+        } catch (Exception e) {
+            System.err.println("Exception in getKwicOutput " + e.getMessage());
         }
-        catch(Exception e){
-             System.err.println("Exception in getKwicOutput " + e.getMessage());
-        }
-        
+
         return alphalist;
     }
-    
-    
-    
-    
+
 }

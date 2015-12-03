@@ -120,7 +120,7 @@ public class ElasticsearchClient implements DBClient {
         return searchResponses;
     }
 
-    public BoolQueryBuilder getFilterquery() {
+    private BoolQueryBuilder getFilterquery() {
         BoolQueryBuilder filterQuery = QueryBuilders.boolQuery();
         try {
             List<UserFilter> userFilters = this.userFilterresponse();
@@ -248,30 +248,29 @@ public class ElasticsearchClient implements DBClient {
         return uniqueTokens;
 
     }
-    
+
     @Override
-    public boolean updateHitrate(String documentID,int hitrate){
-        UpdateResponse  response =  new UpdateResponse();
+    public boolean updateHitrate(String documentID, int hitrate) {
+        UpdateResponse response = new UpdateResponse();
         boolean responseFlag = false;
-        try{
-           
+        try {
+
             UpdateRequest updateRequest = new UpdateRequest();
             updateRequest.index(Constants.URL_TABLE_NAME);
             updateRequest.type(Constants.ES_TYPE);
             updateRequest.id(documentID);
             updateRequest.doc(jsonBuilder()
                     .startObject()
-                        .field("hitrate", hitrate)
+                    .field("hitrate", hitrate)
                     .endObject());
-           response = esCon.client.update(updateRequest).get();
-            
-        }
-        catch(Exception e){
+            response = esCon.client.update(updateRequest).get();
+
+        } catch (Exception e) {
             System.err.println("Exception in updateHitrate " + e.getMessage());
         }
         return responseFlag;
     }
-    
+
     @Override
     public boolean delete(String documentID) {
         DeleteResponse response = new DeleteResponse();
