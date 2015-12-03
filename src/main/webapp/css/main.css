@@ -134,7 +134,9 @@ a:hover {
     color: #333;
 }
 
-
+.hintbox{
+    color:#333;
+}
 
 .butn {
     position: relative;

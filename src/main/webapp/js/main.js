@@ -120,3 +120,19 @@ function sortHitrate(parent, childSelector, keySelector, sortDescending) {
 
     parent.html(items);
 }
+$(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('.btn-link').popover();
+
+    $('.btn-link').on('click', function (e) {
+        $('.btn-link').not(this).popover('hide');
+    });
+});
+$('html').on('mouseup', function (e) {
+    if (!$(e.target).closest('.popover').length) {
+        $('.popover').each(function () {
+            $(this.previousSibling).popover('hide');
+        });
+    }
+});

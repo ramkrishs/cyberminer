@@ -12,6 +12,7 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <title>Cyberminer - Search</title>
+        <link href="css/sweetalert.css" rel="stylesheet">
         <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -85,7 +86,9 @@
                                         <i class="glyphicon glyphicon-search"></i> Search
                                     </button>
                                 </span>
+                                  
                             </div>
+                            <a id="hint-link" class="btn btn-link pull-right" style="margin-right:10px">Search hint</a> 
                         </form>
 
 
@@ -149,7 +152,7 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
         <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-       
+        <script src="js/vendor/sweetalert.min.js"></script>
         <script src="js/vendor/bootstrap.min.js"></script>
         
         <script>
@@ -189,6 +192,7 @@
                     autofil(res);
                 }
             });
+             
             $("li a").click(function(){
                 
                 var value = "2";
@@ -272,6 +276,13 @@
                     perPage       : newPerPage
             });
             });
+            $('#hint-link').click(function(){
+//                swal({   title: 'Search hint',   
+//                    html: '<span style="color:#333;"><b>OR Search: </b> Search input format: Keyword1 keyword2 keyword3 keyword4 <br/>, ' +     '<b>AND Search: </b> Search input format: “Keyword1 && keyword2 && keyword3 && keyword4 (it is ok have space between && symbol and keywords)” <br> ' +     '<b>NOT Search: </b> Search input format: !keyword</span>' 
+//                });
+swal({   title: '<span style="color:#333; font-size:20px;"><b>OR Search: </b> Search input format: Keyword1 keyword2<br/>' +     '<b>AND Search: </b> Search input format: “Keyword1 && keyword2” <br> ' +     '<b>NOT Search: </b> Search input format: !keyword</span>',   html: $("<div>").addClass('hintbox').text('jQuery is everywhere.') });
+            });
+            
         });
         
         </script>
