@@ -28,9 +28,9 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**
  *
- * @author Karthik Kannambadi Sridhar
+ * 
  * @author Ramakrishnan Sathyavageeswaran
- * @author Vaidehi Jariwala Fall 2015 - CS 6362.001
+ * 
  */
 public class CyberminerController extends HttpServlet {
 
